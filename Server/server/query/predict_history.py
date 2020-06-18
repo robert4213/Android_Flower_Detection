@@ -5,7 +5,7 @@ import os
 from server.model import predict
 import json
 
-predict_history_blueprint = Blueprint('login',
+predict_history_blueprint = Blueprint('query',
                               __name__,
                               template_folder='templates/')
 
@@ -13,6 +13,7 @@ predict_history_blueprint = Blueprint('login',
 # Upload Image Route
 @predict_history_blueprint.route('/predict_history', methods=['GET'])
 def predict_history():
+    ## 还没写完
     pass
     ## need to return the prediction history of a user, a json file
     return render_template('login_history.html', form=form)
