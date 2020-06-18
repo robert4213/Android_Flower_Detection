@@ -9,8 +9,9 @@ python3 app.py
 
 ### APIs
 1. 注册URL
-"http://10.0.2.2:5000/user/register";
-Request
+- POSTMAN: http://10.0.2.2:5000/user/register
+- Andriod Studio: http://10.0.2.2:5000/user/register
+- JSON Request Body (POST)
 `{
     "email": "sharon.jin@sjsu.edu",
     "mobile": "15536644556",
@@ -20,22 +21,30 @@ Request
 }`
 
 2. Login in
-"http://10.0.2.2:5000/user/login";
-Request
+- POSTMAN: http://10.0.2.2:5000/user/login
+- Andriod Studio: http://10.0.2.2:5000/user/login
+- JSON Request Body (POST)
 `{
     "email": "sharon.jin@sjsu.edu",
     "password": "test"
 }`
 
 3. Logout
-"http://10.0.2.2:5000/user/logout";
-
+- POSTMAN: http://10.0.2.2:5000/user/logout
+- Andriod Studio: http://10.0.2.2:5000/user/logout
+- GET
 
 4. Change password
-"http://10.0.2.2:5000/user/change_password";
+- POSTMAN: http://10.0.2.2:5000/user/change_password
+- Andriod Studio: http://10.0.2.2:5000/user/change_password
+- JSON Request Body (POST)
 Request json body
 `{
     "current_password": "test",
     "new_password": "test1",
     "new_password2": "test1"
 }`
+
+5. Image Upload
+- POSTMAN: http://10.0.2.2:5000/upload
+- Andriod Studio: http://10.0.2.2:5000/upload
