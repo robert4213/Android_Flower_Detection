@@ -6,8 +6,7 @@ from server.model import predict
 import json
 
 predict_history_blueprint = Blueprint('query',
-                              __name__,
-                              template_folder='templates/')
+                              __name__)
 
 
 # Upload Image Route

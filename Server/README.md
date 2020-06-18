@@ -21,7 +21,7 @@ python3 app.py
 }`
 
 2. Login in
-- POSTMAN: http://10.0.2.2:5000/user/login
+- POSTMAN: http://127.0.0.1:5000/user/login
 - Andriod Studio: http://10.0.2.2:5000/user/login
 - JSON Request Body (POST)
 `{
@@ -30,12 +30,12 @@ python3 app.py
 }`
 
 3. Logout
-- POSTMAN: http://10.0.2.2:5000/user/logout
+- POSTMAN: http://127.0.0.1:5000/user/logout
 - Andriod Studio: http://10.0.2.2:5000/user/logout
 - GET
 
 4. Change password
-- POSTMAN: http://10.0.2.2:5000/user/change_password
+- POSTMAN: http://127.0.0.1:5000/user/change_password
 - Andriod Studio: http://10.0.2.2:5000/user/change_password
 - JSON Request Body (POST)
 Request json body
@@ -46,5 +46,5 @@ Request json body
 }`
 
 5. Image Upload
-- POSTMAN: http://10.0.2.2:5000/upload
+- POSTMAN: http://127.0.0.1:5000/upload
 - Andriod Studio: http://10.0.2.2:5000/upload

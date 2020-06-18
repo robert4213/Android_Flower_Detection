@@ -1,3 +1,4 @@
+# Config file
 global MODEL_PATH
 global ANCHORS_PATH
 global CLASSES_PATH

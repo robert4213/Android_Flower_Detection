@@ -1,9 +1,8 @@
-from flask import Blueprint,render_template,redirect,url_for,flash
-from flask import Flask, render_template, request, send_from_directory, jsonify
+from flask import Blueprint,render_template, Flask, request, send_from_directory, jsonify
 from werkzeug.utils import secure_filename
-import os
 from server.model import predict
 import json
+import os
 
 imageupload_blueprint = Blueprint('imageupload',
                               __name__,
@@ -44,7 +43,7 @@ def upload():
         result_dict = write_json_result(boxes)
         print(jsonify(result_dict))
         return jsonify(result_dict)
-    # 重新返回上传界面
+    # redirect to upload page
     return render_template('upload.html')
 
 def write_json_result(boxes):

@@ -50,7 +50,7 @@ class User(db.Model, UserMixin):
         return check_password_hash(self.password_hash, password)
 
     def change_password(self, password):
-        self.password_hash = generate_password_hash(password)    
+        self.password_hash = generate_password_hash(password)
 
     def set_mobile(self, mobile):
         self.mobile = mobile
@@ -82,7 +82,7 @@ class LoginHistory(db.Model):
         self.login_device = login_device
 
 ##############
-## Model - PredictHistory
+## Model - Species
 ##############
 class Species(db.Model):
 

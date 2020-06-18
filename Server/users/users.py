@@ -1,18 +1,17 @@
-from flask import Blueprint,render_template,redirect,url_for, current_app, session
-from flask import Flask, render_template, request, send_from_directory, jsonify
+from flask import Blueprint, current_app, session, request, jsonify
 from werkzeug.utils import secure_filename
-from server.db_models import User, Species
 from sqlalchemy.exc import IntegrityError
-import json
-from datetime import datetime
 from server import db
 from server.utils import response_code
+from server.db_models import User
+import json
+from datetime import datetime
 import re
 import os
 
+
 users_blueprint = Blueprint('user',
-                              __name__,
-                              template_folder='templates/')
+                              __name__)
 
 
 # Upload Image Route

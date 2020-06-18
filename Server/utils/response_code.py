@@ -1,3 +1,4 @@
+# response code
 class RET:
     OK                  = "0"
     DBERR               = "4001"
