@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, send_from_directory, jsonify
 from werkzeug.utils import secure_filename
 from datetime import timedelta
 import os
-import predict
+from model import predict
 import json
 
 

@@ -16,4 +16,4 @@ def predict_history():
     ## 还没写完
     pass
     ## need to return the prediction history of a user, a json file
-    return render_template('login_history.html', form=form)
+    ## return render_template('login_history.html', form=form)

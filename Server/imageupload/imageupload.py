@@ -9,7 +9,7 @@ imageupload_blueprint = Blueprint('imageupload',
                               __name__,
                               template_folder='templates/')
 
-# 设置允许的文件格式
+# acceptable image format
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'JPG', 'PNG', 'bmp', 'jpeg'])
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
