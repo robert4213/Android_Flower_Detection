@@ -1,0 +1,5 @@
+
+model_data/yolo_weights.h5
+logs/trained_weights_stage_1.h5
+.idea/
+*.h5
