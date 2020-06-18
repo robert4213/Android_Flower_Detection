@@ -7,22 +7,23 @@
 
 
 
-python3 app.py db init
+`python3 app.py db init
 python3 app.py db migrate -m "init database"
+`
 
-#完成和测试用户注册功能 ok
-#完成和测试用户登录功能 ok
-#完成用户登出功能的接口 ok
-#完成用户修改密码的接口 ok
+- 完成和测试用户注册功能 ok
+- 完成和测试用户登录功能 ok
+- 完成用户登出功能的接口 ok
+- 完成用户修改密码的接口 ok
 ---- 以上OK
 
-#完成插入用户登录记录数据库的写操作
-#完成用户预测记录数据库的写操作
+- 完成插入用户登录记录数据库的写操作
+- 完成用户预测记录数据库的写操作
 ---- 以上TODO
 
-#修改modle的session功能
-#修稿model的返回功能（不要去json网页读取，直接把json result返回response）
+- 修改modle的session功能
+- 修改model的返回功能（不要去json网页读取，直接把json result返回response）
 ---- 以上TODO
 
-#利用Load balancer处理多个request
+- 利用Load balancer处理多个request
 ---- 以上TODO
