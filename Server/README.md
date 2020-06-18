@@ -1,6 +1,8 @@
 ### 跑服务器
 python3 app.py
 
+- 需要把utils/config.py 里面几个关于model的地址改成自己的机子上的地址
+
 - 如果报错没有module，根据错误提示把相应的library安装一下就可以了，比如 pip3 install XXXXX(library name)
 - 如果数据库报错，把server/data.sqlite删除，然后跑一下python3 db_setup.py
 

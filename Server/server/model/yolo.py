@@ -9,15 +9,16 @@ from keras.layers import Input
 from PIL import Image, ImageFont, ImageDraw
 from server.model.nets.yolo3 import yolo_body,yolo_eval
 from server.model.utils.utils import letterbox_image
+from server.utils import config
 
 # PATH = os.path.dirname(__file__)
 # PARENT_PATH  = os.path.dirname(PATH)
 
 class YOLO(object):
     _defaults = {
-        "model_path": '/Users/xiaoting/Documents/Courses/295_Project/Plant_Identification_295/server/model/logs/last1.h5',
-        "anchors_path": '/Users/xiaoting/Documents/Courses/295_Project/Plant_Identification_295/server/model/model_data/yolo_anchors.txt',
-        "classes_path": '/Users/xiaoting/Documents/Courses/295_Project/Plant_Identification_295/server/model/model_data/class.txt',
+        "model_path": config.MODEL_PATH,
+        "anchors_path": config.ANCHORS_PATH,
+        "classes_path": config.CLASSES_PATH,
         "score" : 0.5,
         "iou" : 0.3,
         "model_image_size" : (416, 416)
