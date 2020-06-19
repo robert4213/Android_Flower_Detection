@@ -10,12 +10,10 @@ import re
 import os
 
 
-users_blueprint = Blueprint('user',
-                              __name__)
+user_blueprint = Blueprint('user', __name__)
 
-
-# Upload Image Route
-@users_blueprint.route('/register', methods=['POST'])
+# Register API
+@user_blueprint.route('/register', methods=['POST'])
 def register():
 
     # get dictionary from json from request
@@ -27,18 +25,20 @@ def register():
     password = req_dict.get("password")
     password2 = req_dict.get("password2")
 
+    # test print, will be deleted
     print("All users in db")
     users = User.query.all()
     for ele in users:
         print(ele)
     print("Done printing all users in db")
+
     # check arguments
     if not all([email, username, password, password2]):
         return jsonify(errno=response_code.RET.PARAMERR, errmsg="Registration information not complete")
-
+    # check email address format
     if not re.match(r"\"?([-a-zA-Z0-9.`?{}]+@\w+\.\w+)\"?", email):
         return jsonify(errno=response_code.RET.PARAMERR, errmsg="Please enter the correct email address")
-
+    # check mobile number format
     if mobile and not re.match(r"\d{10}", mobile):
         return jsonify(errno=response_code.RET.PARAMERR, errmsg="Mobile number incorrect")
 
@@ -68,12 +68,11 @@ def register():
     session["email"] = email
     session["user_id"] = user.id
 
-    # 重新返回上传界面
     return jsonify(errno=response_code.RET.OK, errmsg="Successfully registered")
 
 
 # login API
-@users_blueprint.route('/login', methods=['POST'])
+@user_blueprint.route('/login', methods=['POST'])
 def login():
 
     req_dict = request.get_json()
@@ -102,8 +101,8 @@ def login():
 
     return jsonify(errno=response_code.RET.OK, errmsg="Login Successful")
 
-
-@users_blueprint.route('/check_login', methods=['GET'])
+# check_login
+@user_blueprint.route('/check_login', methods=['GET'])
 def check_login():
     email = session.get("email")
     if email:
@@ -112,7 +111,7 @@ def check_login():
         return jsonify(errno=response_code.RET.SESSIONERR, errmsg="not login")
 
 # log out
-@users_blueprint.route('/logout', methods=['DELETE'])
+@user_blueprint.route('/logout', methods=['DELETE'])
 def logout():
     csrf_token = session.get("csrf_token")
     session.clear()
@@ -120,11 +119,10 @@ def logout():
     return jsonify(errno=response_code.RET.OK, errmsg="OK")
 
 # change password
-@users_blueprint.route('/change_password', methods=['POST'])
+@user_blueprint.route('/change_password', methods=['POST'])
 def change_password():
     # get dictionary from json from request
     req_dict = request.get_json()
-
 
     if not session.get("user_id"):
         return jsonify(errno=response_code.RET.SESSIONERR, errmsg="not login")

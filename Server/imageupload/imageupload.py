@@ -15,37 +15,40 @@ def allowed_file(filename):
 
 
 # Upload Image Route
-@imageupload_blueprint.route('/upload', methods=['POST', 'GET'])
+@imageupload_blueprint.route('/upload', methods=['POST'])
 def upload():
-    if request.method == 'POST':
-        # Get the image file
-        import os
-        if os.path.exists("static/data.json"):
-            os.remove("static/data.json")
-        else:
-            print("The json file does not exist")
+    # Get the image file
+    import os
+    if os.path.exists("static/data.json"):
+        os.remove("static/data.json")
+    else:
+        print("The json file does not exist")
 
-        f = request.files['file']
-        if not (f and allowed_file(f.filename)):
-            return jsonify({"error": 1001, "msg": "Image Type: png/PNG/jpg/JPG/bmp/jpeg"})
-        # Get basepath
-        PATH = os.path.dirname(__file__)
-        PARENT_PATH  = os.path.dirname(PATH)
-        # Save the image in static/images folder
-        upload_path = os.path.join(PARENT_PATH, 'static/images', secure_filename(f.filename))
-        # Save the image
-        f.save(upload_path)
-        print(upload_path)
-        # Run the machinle learning prediction model
-        boxes = predict.predict_species(upload_path)
-        print(boxes)
-        # Jsonify the result
-        result_dict = write_json_result(boxes)
-        print(jsonify(result_dict))
-        return jsonify(result_dict)
+    f = request.files['file']
+    if not (f and allowed_file(f.filename)):
+        return jsonify({"error": 1001, "msg": "Image Type: png/PNG/jpg/JPG/bmp/jpeg"})
+
+    # Basepath
+    PATH = os.path.dirname(__file__)
+    PARENT_PATH  = os.path.dirname(PATH)
+
+    # Save the image in static/images folder
+    upload_path = os.path.join(PARENT_PATH, 'static/images', secure_filename(f.filename))
+
+    # Save the image
+    f.save(upload_path)
+    print(upload_path)
+    # Run the machinle learning prediction model
+    boxes = predict.predict_species(upload_path)
+    print(boxes)
+    # Jsonify the result
+    result_dict = write_json_result(boxes)
+    print(jsonify(result_dict))
+    return jsonify(result_dict)
     # redirect to upload page
     return render_template('upload.html')
 
+# Transform the boxes into JSON
 def write_json_result(boxes):
     if len(boxes) == 0: return
     result_dic = {}
@@ -63,6 +66,7 @@ def write_json_result(boxes):
         json.dump(result_dic, f)
     return result_dic
 
+# Return data.json file
 @imageupload_blueprint.route('/data.json',methods=['GET'])
 def download_file():
     PATH = os.path.dirname(__file__)

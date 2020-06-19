@@ -10,7 +10,6 @@ from datetime import time, datetime
 # get_id()
 
 
-
 ##############
 ## Model - USER
 ##############

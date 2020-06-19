@@ -38,7 +38,7 @@ login_manager.login_view = "login"
 ## Grab the blueprints from the other views.py files for each "app"
 
 from server.imageupload.imageupload import imageupload_blueprint
-from server.users.users import users_blueprint
+from server.users.users import user_blueprint
 
 app.register_blueprint(imageupload_blueprint,url_prefix="/")
-app.register_blueprint(users_blueprint, url_prefix="/user")
+app.register_blueprint(user_blueprint, url_prefix="/user")
