@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/dashboard"
+        android:title="DashBoard"
+        android:icon="@drawable/ic_baseline_dashboard" />
+    <item android:id="@+id/home"
+        android:title="Home"
+        android:icon="@drawable/ic_baseline_camera"/>
+    <item android:id="@+id/about"
+        android:title="About"
+        android:icon="@drawable/ic_baseline_info"/>
+</menu>

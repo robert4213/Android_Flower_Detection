@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/ViewHis"
+        android:title="View History"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/Rating"
+        android:title="Rating"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/Contact"
+        android:title="Contact Us"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/test_menu"
+        android:title="Test"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/sign_out_menu"
+        android:title="@string/sign_out"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/action_notification"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_baseline_notification_important_24"
+        android:title="@string/notification" />
+</menu>

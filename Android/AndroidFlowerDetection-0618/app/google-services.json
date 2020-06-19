@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "37366223849",
+    "firebase_url": "https://flower-detection-efd65.firebaseio.com",
+    "project_id": "flower-detection-efd65",
+    "storage_bucket": "flower-detection-efd65.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:37366223849:android:847681999404420d863178",
+        "android_client_info": {
+          "package_name": "com.test.flowerdetection"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "37366223849-sutc6ajq8kj3oe2446euar2ubklbesbr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.test.flowerdetection",
+            "certificate_hash": "34aec16b49d430cb493f144f95a101375b7ff658"
+          }
+        },
+        {
+          "client_id": "37366223849-gnonlk66dbi5n78mpgk3ocdsi0eql69j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDdaAhDwp_yzYcUz_tsWomO57z3HbqWX-A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "37366223849-gnonlk66dbi5n78mpgk3ocdsi0eql69j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
