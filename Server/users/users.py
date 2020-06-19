@@ -43,7 +43,7 @@ def register():
         return jsonify(errno=response_code.RET.PARAMERR, errmsg="Mobile number incorrect")
 
     if password != password2:
-        jsonify(errno=response_code.RET.PARAMERR, errmsg="Passwords not match")
+        return jsonify(errno=response_code.RET.PARAMERR, errmsg="Passwords not match")
 
     registration_time = datetime.now()
     user = User(email=email, username=username, password=password, registration_time=registration_time)

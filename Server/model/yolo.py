@@ -132,7 +132,7 @@ class YOLO(object):
         print('Found {} boxes for {}'.format(len(out_boxes), 'img'))
         # 设置字体
         print("Size: {}".format(np.floor(3e-2 * image.size[1] + 0.5).astype('int32')))
-        font = ImageFont.truetype(font='/Users/xiaoting/Documents/Courses/295_Project/Plant_Identification/model/font/simhei.ttf',
+        font = ImageFont.truetype(font=FONT_PATH,
                     size=np.floor(3e-2 * image.size[1] + 0.5).astype('int32'))
         thickness = (image.size[0] + image.size[1]) // 300
 
