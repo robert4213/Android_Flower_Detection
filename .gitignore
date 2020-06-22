@@ -1,0 +1,10 @@
+*.iml
+./Android/AndroidFlowerDetection-0618/.gradle
+/local.properties
+./Android/AndroidFlowerDetection-0618/.idea/*
+.DS_Store
+./Android/AndroidFlowerDetection-0618/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
