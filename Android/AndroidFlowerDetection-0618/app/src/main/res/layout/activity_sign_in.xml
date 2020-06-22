@@ -90,5 +90,14 @@
             android:layout_height="wrap_content"
             android:visibility="invisible">
         </ProgressBar>
+
+        <TextView
+            android:id="@+id/responseTextLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textAlignment="center"
+            android:textColor="#FF0000"
+            android:textStyle="bold" />
     </LinearLayout>
 </RelativeLayout>

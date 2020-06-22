@@ -23,11 +23,22 @@
             android:text="REGISTER"/>
 
         <EditText
-            android:id="@+id/etNama"
+            android:id="@+id/etName"
             android:layout_marginTop="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Nama"
+            android:hint="Name"
+            android:textColorHint="#80FFFFFF"
+            android:padding="8dp"
+            android:inputType="textPersonName"
+            android:background="@drawable/bg_rectangle_edittext"
+            android:textColor="#80FFFFFF"/>
+        <EditText
+            android:id="@+id/etMobile"
+            android:layout_marginTop="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Mobile"
             android:textColorHint="#80FFFFFF"
             android:padding="8dp"
             android:inputType="textPersonName"
@@ -57,7 +68,17 @@
             android:padding="8dp"
             android:background="@drawable/bg_rectangle_edittext"
             android:textColor="#80FFFFFF"/>
-
+        <EditText
+            android:id="@+id/etRePassword"
+            android:layout_marginTop="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Re-Password"
+            android:textColorHint="#80FFFFFF"
+            android:inputType="textPassword"
+            android:padding="8dp"
+            android:background="@drawable/bg_rectangle_edittext"
+            android:textColor="#80FFFFFF"/>
         <Button
             android:id="@+id/btnRegister"
             android:layout_marginTop="8dp"
@@ -66,5 +87,13 @@
             android:textColor="#FFF"
             android:text="REGISTER"
             android:background="@drawable/bg_rectangle_button"/>
+        <TextView
+            android:id="@+id/responseTextRegister"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textAlignment="center"
+            android:textColor="#FF0000"
+            android:textStyle="bold" />
     </LinearLayout>
 </RelativeLayout>
