@@ -26,17 +26,26 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     private static final String KEY_NAME = "image_name";
     private static final String KEY_IMAGE = "image_data";
     private static final String KEY_TIME = "time_stamp";
+    private static final String KEY_LAT = "loc_lat";
+    private static final String KEY_LON = "loc_lon";
+    private static final String KEY_CITY = "loc_city";
 
     // Table create statement
     private static final String CREATE_TABLE_IMAGE = "CREATE TABLE " + DB_TABLE + "("+
             KEY_NAME + " TEXT," +
-            KEY_TIME + " Text," +
-            KEY_IMAGE + " BLOB);";
+            KEY_TIME + " TEXT," +
+            KEY_IMAGE + " BLOB," +
+            KEY_LAT + " DOUBLE," +
+            KEY_LON + " DOUBLE," +
+            KEY_CITY + " TEXT);";
 
     private static final String CREATE_TABLE_IMAGE_IF_NOT_EXIST = "CREATE TABLE IF NOT EXISTS " + DB_TABLE + "("+
             KEY_NAME + " TEXT," +
-            KEY_TIME + " Text," +
-            KEY_IMAGE + " BLOB);";
+            KEY_TIME + " TEXT," +
+            KEY_IMAGE + " BLOB," +
+            KEY_LAT + " DOUBLE," +
+            KEY_LON + " DOUBLE," +
+            KEY_CITY + " TEXT);";
 
 
     public DataBaseHelper(Context context) {
@@ -65,7 +74,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void addEntry( String name,  Bitmap bitmap) throws SQLiteException {
+    public void addEntry( String name,  Bitmap bitmap, Double lat, Double lon, String city) throws SQLiteException {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues cv = new  ContentValues();
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -76,6 +85,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         cv.put(KEY_NAME,    name);
         cv.put(KEY_IMAGE,   image);
         cv.put(KEY_TIME,dateFormat.format(date));
+        cv.put(KEY_LAT, lat);
+        cv.put(KEY_LON, lon);
+        cv.put(KEY_CITY, city);
         database.insert( DB_TABLE, null, cv );
     }
 

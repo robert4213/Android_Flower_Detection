@@ -4,11 +4,17 @@ public class Item {
     private String name;
     private byte[] image;
     private String date;
+    private double latitude;
+    private double longitude;
+    private String city;
 
-    public Item(String name, byte[] image, String date) {
+    public Item(String name, byte[] image, String date, double latitude, double longitude, String city) {
         this.name = name;
         this.image = image;
         this.date = date;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.city = city;
     }
 
     public String getName() {
@@ -34,5 +40,17 @@ public class Item {
     public void setImage(byte[] image) {
         this.image = image;
     }
+
+    public double getLatitude() {return latitude;}
+
+    public void setLatitude(double latitude) {this.latitude = latitude;}
+
+    public double getLongitude() {return longitude;}
+
+    public void setLongitude(double longitude) {this.longitude = longitude;}
+
+    public String getCity() {return city;}
+
+    public void setCity(String city) {this.city = city;}
 }
 

@@ -9,6 +9,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.Toast;
+
+import com.google.android.gms.location.FusedLocationProviderClient;
 
 import java.util.ArrayList;
 
@@ -41,8 +44,13 @@ public class image_list extends AppCompatActivity {
             String name = cursor.getString(cursor.getColumnIndex("image_name"));
             String time = cursor.getString(cursor.getColumnIndex("time_stamp"));
             byte[] image = cursor.getBlob(cursor.getColumnIndex("image_data"));
-
-            list.add(new Item(name, image, time));
+            double lat = cursor.getDouble(cursor.getColumnIndex("loc_lat"));
+            double lon = cursor.getDouble(cursor.getColumnIndex("loc_lon"));
+            String city = cursor.getString(cursor.getColumnIndex("loc_city"));
+            list.add(new Item(name, image, time, lat, lon, city));
+        }
+        if(list.isEmpty()) {
+            Toast.makeText(this, "No uploaded history!", Toast.LENGTH_LONG).show();
         }
         adapter.notifyDataSetChanged();
 

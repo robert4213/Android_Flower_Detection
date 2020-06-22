@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -15,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -165,6 +167,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         imageView = (ImageView) findViewById(R.id.imageView);
        // btnChoose = (Button) findViewById(R.id.button_choose);
         btnUpload = (Button) findViewById(R.id.button_upload);
+
+        //get Location Permission
       //  bClick = (Button)findViewById(R.id.Bclick);
 
 //        //For camera
@@ -622,6 +626,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
                         startActivity(new Intent(MainActivity.this, SignInActivity.class));
                         finish();
+                        return true;
+                    case R.id.action_map:
+                        Intent i = new Intent(getApplicationContext(), Map.class);
+                        startActivity(i);
                         return true;
 
                     case R.id.action_notification:

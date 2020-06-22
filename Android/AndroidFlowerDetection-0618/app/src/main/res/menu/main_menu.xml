@@ -24,9 +24,19 @@
         android:id="@+id/sign_out_menu"
         android:title="@string/sign_out"
         app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/action_map"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_baseline_location_on_24"
+        android:title="@string/notification" />
+
     <item
         android:id="@+id/action_notification"
         app:showAsAction="always"
         android:icon="@drawable/ic_baseline_notification_important_24"
         android:title="@string/notification" />
+
+
+
 </menu>
