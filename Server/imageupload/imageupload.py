@@ -1,6 +1,9 @@
-from flask import Blueprint,render_template, Flask, request, send_from_directory, jsonify
+from flask import Blueprint, render_template, Flask, request, send_from_directory, jsonify, session
 from werkzeug.utils import secure_filename
 from server.model import predict
+from server import db
+from server.db_models import PredictHistory
+from datetime import datetime
 import json
 import os
 
@@ -43,6 +46,12 @@ def upload():
     print(boxes)
     # Jsonify the result
     result_dict = write_json_result(boxes)
+    # species_id需要改成表中的id
+    new_predict = PredictHistory(user_id=session["user_id"], \
+                                species_id=1,\
+                                predict_time=datetime.now()
+                                )
+    write_predict_history(new_predict)
     print(jsonify(result_dict))
     return jsonify(result_dict)
     # redirect to upload page
@@ -65,6 +74,15 @@ def write_json_result(boxes):
     with open(os.path.join(PARENT_PATH, 'static/data.json'), "w") as f:
         json.dump(result_dic, f)
     return result_dic
+
+
+def write_predict_history(new_predict):
+    try:
+        db.session.add(new_predict)
+        db.session.commit()
+    except Exception as e:
+        print("PREDICT HISTORY WRITE ERROR")
+        db.session.rollback()
 
 # Return data.json file
 @imageupload_blueprint.route('/data.json',methods=['GET'])

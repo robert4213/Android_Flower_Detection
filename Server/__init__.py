@@ -5,7 +5,7 @@ from flask_migrate import Migrate, MigrateCommand
 from flask_login import LoginManager
 from flask_mail import Mail
 from datetime import timedelta
-import server.imageupload.imageupload
+# import server.imageupload.imageupload
 
 
 # Create a login manager object

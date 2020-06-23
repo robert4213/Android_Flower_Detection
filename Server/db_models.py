@@ -134,10 +134,13 @@ class PredictHistory(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     species_id = db.Column(db.Integer, db.ForeignKey("species.id"))
     predict_time = db.Column(db.DateTime)
-    predict_image_id = db.Column(db.String(256))
+    # predict_image_id = db.Column(db.String(256))
 
-    def __init__(self, user_id, species_id, predict_time, predict_image_id):
+    def __init__(self, user_id, species_id, predict_time):
         self.user_id = user_id
         self.species_id = species_id
         self.predict_time = predict_time
-        self.predict_image_id = predict_image_id
+        #self.predict_image_id = predict_image_id
+
+    def __repr__(self):
+        return "user_id: {} predicted species_id:{} at {}".format(self.user_id, self.species_id, self.predict_time)

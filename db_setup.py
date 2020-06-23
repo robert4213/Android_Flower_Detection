@@ -30,3 +30,9 @@ records = LoginHistory.query.all()
 for record in records:
     print(record)
 print("Done printing all login history in db")
+
+
+records = PredictHistory.query.all()
+for record in records:
+    print(record)
+print("Done printing all predict history in db")
