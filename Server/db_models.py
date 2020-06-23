@@ -48,15 +48,22 @@ class User(db.Model, UserMixin):
         print(check_password_hash(self.password_hash, password))
         return check_password_hash(self.password_hash, password)
 
+    def __repr__(self):
+        return "username: {}, email: {}, mobile: {}, registration_time: {}". \
+                    format(self.username, self.email, self.mobile, self.registration_time)
+
     def change_password(self, password):
         self.password_hash = generate_password_hash(password)
 
     def set_mobile(self, mobile):
         self.mobile = mobile
 
-    def __repr__(self):
-        return "username: {}, email: {}, mobile: {}, registration_time: {}". \
-                    format(self.username, self.email, self.mobile, self.registration_time)
+    def set_username(self, username):
+        self.username = username
+
+    def set_mobile(self, mobile):
+        self.mobile = mobile
+
 
 ##############
 ## Model - LoginHistory
@@ -70,15 +77,21 @@ class LoginHistory(db.Model):
     ip_address = db.Column(db.String(24))
     successful = db.Column(db.Boolean)
     login_time = db.Column(db.DateTime)
-    login_device = db.Column(db.String(128))
+    login_agent = db.Column(db.String(128))
 
 
-    def __init__(self,user_id, ip_address, successful, login_time, login_device):
+    def __init__(self,user_id, ip_address, successful, login_time, login_agent):
         self.user_id = user_id
         self.ip_address = ip_address
         self.successful = successful
-        self.device_id = device_id
-        self.login_device = login_device
+        self.login_time = login_time
+        self.login_agent = login_agent
+
+    def __repr__(self):
+        return "login user_id: {}, ip_address: {}, successful: {}, \
+                login_time: {}, login_agent: {}".format(self.user_id,\
+                    self.ip_address, self.successful, self.login_time,\
+                    self.login_agent)
 
 ##############
 ## Model - Species
@@ -91,17 +104,24 @@ class Species(db.Model):
     name = db.Column(db.String(128))
     external_link = db.Column(db.String(256))
     update_time = db.Column(db.DateTime)
-    stardard_image_id = db.Column(db.String(128))
+    standard_image_id = db.Column(db.String(128))
 
-    def __init__(self,name, external_link, update_time, stardard_image_id):
+    def __init__(self,name, external_link, update_time, standard_image_id):
         self.name = name
         self.external_link = external_link
         self.update_time = update_time
-        self.stardard_image_id = stardard_image_id
+        self.standard_image_id = standard_image_id
 
     def __repr__(self):
         return "id: {}, name: {}".format(self.id, self.name)
 
+    def set_external_link(self, external_link):
+        self.external_link = external_link
+        self.update_time = datetime.now()
+
+    def set_standard_image(self, standard_image_id):
+        self.standard_image_id = standard_image_id
+        self.update_time = datetime.now()
 
 ##############
 ## Model - PredictHistory
@@ -116,6 +136,8 @@ class PredictHistory(db.Model):
     predict_time = db.Column(db.DateTime)
     predict_image_id = db.Column(db.String(256))
 
-    def __init__(self,menu_name, brew_time):
-        self.menu_name = menu_name
-        self.brew_time = brew_time
+    def __init__(self, user_id, species_id, predict_time, predict_image_id):
+        self.user_id = user_id
+        self.species_id = species_id
+        self.predict_time = predict_time
+        self.predict_image_id = predict_image_id

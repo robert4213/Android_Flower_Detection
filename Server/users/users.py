@@ -3,7 +3,7 @@ from werkzeug.utils import secure_filename
 from sqlalchemy.exc import IntegrityError
 from server import db
 from server.utils import response_code
-from server.db_models import User
+from server.db_models import User, LoginHistory
 import json
 from datetime import datetime
 import re
@@ -89,17 +89,42 @@ def login():
         return jsonify(errno=response_code.RET.DBERR, errmsg="Query User Failed")
 
     if user is None:
-        current_app.logger.error(e)
         return jsonify(errno=response_code.RET.DBERR, errmsg="User Not Exist")
 
     if not user.check_password(password):
+
+        new_login = LoginHistory(user.id, \
+                            ip_address=request.environ['REMOTE_ADDR'], \
+                            successful=False, \
+                            login_time=datetime.now(), \
+                            login_agent=request.user_agent.string)
+        write_login_history(new_login)
         return jsonify(errno=response_code.RET.DBERR, errmsg="Incorrect Password")
 
     session["email"] = email
     session["username"] = user.username
     session["user_id"] = user.id
 
+    # write login history
+    new_login = LoginHistory(user.id, \
+                            ip_address=request.environ['REMOTE_ADDR'], \
+                            successful=True, \
+                            login_time=datetime.now(), \
+                            login_agent=request.user_agent.string)
+
+    write_login_history(new_login)
+
     return jsonify(errno=response_code.RET.OK, errmsg="Login Successful")
+
+
+def write_login_history(new_login):
+    try:
+        db.session.add(new_login)
+        db.session.commit()
+    except Exception as e:
+        print("LOGIN HISTORY WRITE ERROR")
+        db.session.rollback()
+
 
 # check_login
 @user_blueprint.route('/check_login', methods=['GET'])

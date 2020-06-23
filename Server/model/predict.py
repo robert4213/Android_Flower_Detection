@@ -1,12 +1,6 @@
 from PIL import Image
 from server.model.yolo import YOLO
 
-# from server.model.nets.yolo3 import yolo_body
-# from keras.layers import Input
-# from server.model.yolo import YOLO
-# from PIL import Image
-# import numpy as np
-
 def predict_species(image_path):
     yolo = YOLO()   ### session keep open
     image = Image.open(image_path)
