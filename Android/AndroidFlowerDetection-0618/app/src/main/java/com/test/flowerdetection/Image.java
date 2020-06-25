@@ -454,9 +454,9 @@ public class Image extends AppCompatActivity implements GoogleApiClient.OnConnec
                         startActivity(new Intent(Image.this, SignInActivity.class));
                         finish();
                         return true;
-                    case R.id.action_notification:
-                        Toast.makeText(Image.this, "Notification clicked.", Toast.LENGTH_SHORT).show();
-                        break;
+//                    case R.id.action_notification:
+//                        Toast.makeText(Image.this, "Notification clicked.", Toast.LENGTH_SHORT).show();
+//                        break;
                 }
                 return false;
             }

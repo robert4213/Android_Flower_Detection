@@ -7,6 +7,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:actionButtonStyle">@style/MyActionButtonStyle</item>
     </style>
 
     <style name="AppThemeMaterial" parent="Theme.MaterialComponents.Light.DarkActionBar">
@@ -16,6 +17,11 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:actionButtonStyle">@style/MyActionButtonStyle</item>
     </style>
 
+    <style name="MyActionButtonStyle">
+        <item name="android:minWidth">10dip</item>
+        <item name="android:padding">0dip</item>
+    </style>
 </resources>

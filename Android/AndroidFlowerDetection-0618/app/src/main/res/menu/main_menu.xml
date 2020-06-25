@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
     <item
         android:id="@+id/ViewHis"
         android:title="View History"
@@ -26,17 +28,37 @@
         app:showAsAction="never"/>
 
     <item
+        android:id="@+id/action_video"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_baseline_videocam_24"
+        android:title="@string/notification" />
+
+    <item
+        android:id="@+id/nothing1"
+        app:showAsAction="always"
+        android:title="@string/notification"
+        android:enabled="false"/>
+    <item
+        android:id="@+id/nothing2"
+        app:showAsAction="always"
+        android:title="@string/notification"
+        android:enabled="false"/>
+    <item
+        android:id="@+id/nothing3"
+        app:showAsAction="always"
+        android:title="@string/notification"
+        android:enabled="false"/>
+
+    <item
+        android:id="@+id/action_album"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_baseline_photo_album_24"
+        android:title="@string/notification" />
+
+    <item
         android:id="@+id/action_map"
         app:showAsAction="always"
         android:icon="@drawable/ic_baseline_location_on_24"
         android:title="@string/notification" />
-
-    <item
-        android:id="@+id/action_notification"
-        app:showAsAction="always"
-        android:icon="@drawable/ic_baseline_notification_important_24"
-        android:title="@string/notification" />
-
-
 
 </menu>

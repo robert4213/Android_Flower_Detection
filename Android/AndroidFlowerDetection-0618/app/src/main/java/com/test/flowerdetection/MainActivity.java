@@ -135,7 +135,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             @Override
             public void onClick(View view) {
                 // Toast.makeText(MainActivity.this, "FAB Clicked.", Toast.LENGTH_SHORT).show();
-                selectImage();
+//                selectImage();
+                requestStoragePermission(true);
             }
         });
 
@@ -424,6 +425,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         System.out.println("!!!!!!!!!!!!!!!");
+        Log.i("MENU","option menu clicked");
         switch (item.getItemId()) {
 
             case R.id.ViewHis:
@@ -450,7 +452,14 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 startActivity(new Intent(this, SignInActivity.class));
                 finish();
                 return true;
-            case R.id.action_notification:
+
+            case R.id.action_album:
+                requestStoragePermission(false);
+                finish();
+                return true;
+
+            case R.id.action_video:
+                Toast.makeText(MainActivity.this, "Video clicked.", Toast.LENGTH_SHORT).show();
                 break;
             default:
                 return super.onOptionsItemSelected(item);
@@ -606,6 +615,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         bottomAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
+                Log.i("MENU","bottom bar clicked");
                 switch (item.getItemId()) {
                     case R.id.ViewHis:
                         System.out.println("ViewHis Select");
@@ -632,8 +642,12 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                         startActivity(i);
                         return true;
 
-                    case R.id.action_notification:
-                        Toast.makeText(MainActivity.this, "Notification clicked.", Toast.LENGTH_SHORT).show();
+                    case R.id.action_album:
+                        requestStoragePermission(false);
+                        return true;
+
+                    case R.id.action_video:
+                        Toast.makeText(MainActivity.this, "Video clicked.", Toast.LENGTH_SHORT).show();
                         break;
                 }
                 return false;
