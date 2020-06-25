@@ -46,8 +46,9 @@ def upload():
     print(boxes)
     # Jsonify the result
     result_dict = write_json_result(boxes)
-    # species_id需要改成表中的id
-    new_predict = PredictHistory(user_id=session["user_id"], \
+    # TODO user_id 需要改成session["user_id"]
+    # TODO species_id需要改成表中的id
+    new_predict = PredictHistory(user_id=1, \
                                 species_id=1,\
                                 predict_time=datetime.now()
                                 )
