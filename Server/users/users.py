@@ -32,6 +32,10 @@ def register():
         print(ele)
     print("Done printing all users in db")
 
+    print("request, email: {}, username: {}\
+            mobile: {}, password: {}, password2: {}".\
+            format(email, username, mobile, password, password2))
+
     # check arguments
     if not all([email, username, password, password2]):
         return jsonify(errno=response_code.RET.PARAMERR, errmsg="Registration information not complete")
