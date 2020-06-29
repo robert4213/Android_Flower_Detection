@@ -22,6 +22,20 @@
             android:fontFamily="sans-serif"
             android:text="REGISTER"/>
 
+
+        <EditText
+            android:id="@+id/etEmail"
+            android:layout_marginTop="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Email *"
+            android:textColorHint="#80FFFFFF"
+            android:padding="8dp"
+            android:inputType="textEmailAddress"
+            android:background="@drawable/bg_rectangle_edittext"
+            android:textColor="#80FFFFFF"/>
+
+
         <EditText
             android:id="@+id/etName"
             android:layout_marginTop="8dp"
@@ -45,24 +59,13 @@
             android:background="@drawable/bg_rectangle_edittext"
             android:textColor="#80FFFFFF"/>
 
-        <EditText
-            android:id="@+id/etEmail"
-            android:layout_marginTop="8dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Email"
-            android:textColorHint="#80FFFFFF"
-            android:padding="8dp"
-            android:inputType="textEmailAddress"
-            android:background="@drawable/bg_rectangle_edittext"
-            android:textColor="#80FFFFFF"/>
 
         <EditText
             android:id="@+id/etPassword"
             android:layout_marginTop="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Password"
+            android:hint="Password *"
             android:textColorHint="#80FFFFFF"
             android:inputType="textPassword"
             android:padding="8dp"
@@ -73,12 +76,16 @@
             android:layout_marginTop="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Re-Password"
+            android:hint="Re-Password *"
             android:textColorHint="#80FFFFFF"
             android:inputType="textPassword"
             android:padding="8dp"
             android:background="@drawable/bg_rectangle_edittext"
             android:textColor="#80FFFFFF"/>
+        <TextView android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="* Required"/>
+
         <Button
             android:id="@+id/btnRegister"
             android:layout_marginTop="8dp"

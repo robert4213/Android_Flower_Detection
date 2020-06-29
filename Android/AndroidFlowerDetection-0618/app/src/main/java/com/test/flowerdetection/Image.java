@@ -99,7 +99,7 @@ public class Image extends AppCompatActivity implements GoogleApiClient.OnConnec
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
     private Button btnUpload;
-
+    private ProgressBar pgsBar;
     //public static DataBaseHelper db;
   //  File mPhotoFile;
     Uri bitmap;
@@ -112,13 +112,13 @@ public class Image extends AppCompatActivity implements GoogleApiClient.OnConnec
         Intent intent = getIntent();
         bitmap =  intent.getParcelableExtra("BitmapImage");
         imageView = (ImageView) findViewById(R.id.imageView);
-
+        pgsBar = (ProgressBar) findViewById(R.id.progressBar_cyclic);
+        pgsBar.setVisibility(View.GONE);
         //db = new DataBaseHelper(this);
         //db.queryData();
         Glide.with(Image.this)
                 .load(bitmap)
                 .apply(new RequestOptions().centerCrop()
-                        .circleCrop()
                         .placeholder(R.drawable.ic_launcher_background))
                 .into(imageView);
         setUpBottomAppBar();
@@ -182,6 +182,7 @@ public class Image extends AppCompatActivity implements GoogleApiClient.OnConnec
         btnUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 if (bitmap != null) {
 //                    imageUpload(filePath);
 
@@ -195,10 +196,14 @@ public class Image extends AppCompatActivity implements GoogleApiClient.OnConnec
 //                        e.printStackTrace();
 //                    }
                     try {
+
                         //上传图片
                         //Toast.makeText(Image.this,"Begin uploading"+f.getAbsolutePath(),Toast.LENGTH_LONG).show();
                         imageUploadTask = new ImageUploadTask(Image.this, f, bitmap);
+                        pgsBar.setVisibility(view.VISIBLE);
                         imageUploadTask.execute();
+
+
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

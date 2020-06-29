@@ -80,10 +80,10 @@ public class SignInActivity extends AppCompatActivity implements
         pbProgress = findViewById(R.id.pbProgress);
 
         // Assign fields
-        mSignInButton = (SignInButton) findViewById(R.id.sign_in_button);
+      //  mSignInButton = (SignInButton) findViewById(R.id.sign_in_button);
 
         // Set click listeners
-        mSignInButton.setOnClickListener(this);
+   //     mSignInButton.setOnClickListener(this);
 
         // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -121,12 +121,12 @@ public class SignInActivity extends AppCompatActivity implements
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.sign_in_button:
-                pbProgress.setVisibility(View.VISIBLE);
-                signIn();
-                break;
-        }
+//        switch (v.getId()) {
+//            case R.id.sign_in_button:
+//                pbProgress.setVisibility(View.VISIBLE);
+//                signIn();
+//                break;
+//        }
     }
 
     private void signIn() {
