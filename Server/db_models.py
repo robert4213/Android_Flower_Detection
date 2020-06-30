@@ -106,14 +106,13 @@ class Species(db.Model):
     update_time = db.Column(db.DateTime)
     standard_image_id = db.Column(db.String(128))
 
-    def __init__(self,name, external_link, update_time, standard_image_id):
+    def __init__(self,name, external_link, update_time):
         self.name = name
         self.external_link = external_link
         self.update_time = update_time
-        self.standard_image_id = standard_image_id
 
     def __repr__(self):
-        return "id: {}, name: {}".format(self.id, self.name)
+        return "id: {}, name: {}, external_link: {}".format(self.id, self.name, self.external_link)
 
     def set_external_link(self, external_link):
         self.external_link = external_link
