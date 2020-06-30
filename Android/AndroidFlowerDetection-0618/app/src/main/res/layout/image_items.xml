@@ -1,30 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:gravity="center_horizontal|center_vertical"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
     <ImageView
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="95dp"
+        android:layout_height="95dp"
         android:id="@+id/img_his"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:scaleType="fitXY"
+        android:layout_gravity="center_horizontal" />
 
     <TextView
         android:id="@+id/label_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/img_his"
-        android:layout_alignEnd="@+id/img_his"
-        android:layout_alignRight="@+id/img_his"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="2dp"
-        android:layout_marginEnd="48dp"
-        android:layout_marginRight="48dp"
         android:text="Label"
         android:textAlignment="center"
-        android:textColor="#0e11d1"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textSize="17sp" />
-</RelativeLayout>
+        android:textSize="12sp" />
+</LinearLayout>

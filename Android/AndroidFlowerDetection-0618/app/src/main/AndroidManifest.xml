@@ -34,7 +34,6 @@
         android:usesCleartextTraffic="true">
         <activity android:name=".Map"></activity>
         <activity android:name=".ImgItemDetail" />
-        <activity android:name=".image_list" />
         <activity android:name=".ShowResult" />
         <activity android:name=".Image" />
         <activity android:name=".SignInActivity">

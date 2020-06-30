@@ -1,5 +1,6 @@
 package com.test.flowerdetection;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -35,12 +36,14 @@ public class ImageUploadTask extends AsyncTask<String, Integer, String> {
     private Context mContext;
     Uri bitmap;
     private String box;
+    private String filepath;
 
     // Constructor
-    public ImageUploadTask(Context context, File f, Uri bitmap) {
+    public ImageUploadTask(Context context, File f, Uri bitmap, String filepath) {
         this.f = f;
         this.mContext = context;
         this.bitmap = bitmap;
+        this.filepath = filepath;
     }
 
 
@@ -87,7 +90,11 @@ public class ImageUploadTask extends AsyncTask<String, Integer, String> {
         intent.putExtra("IMAGE_URI",bitmap);
         intent.putExtra("Box", s);
         System.out.println("Box: " + s);
+        String[] file_elements = filepath.split("/");
+        String file_key = file_elements[file_elements.length - 1];
+        intent.putExtra("FILE_KEY", file_key);
         mContext.startActivity(intent);
+        ((Activity)(mContext)).finish();
     }
 
 

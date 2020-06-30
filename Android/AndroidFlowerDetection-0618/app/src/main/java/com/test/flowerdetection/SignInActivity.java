@@ -72,6 +72,7 @@ public class SignInActivity extends AppCompatActivity implements
     public static String postUrl = "http://10.0.2.2:5000/user/login";
     // Firebase instance variables
     private FirebaseAuth mFirebaseAuth;
+    private String user_name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -187,9 +188,9 @@ public class SignInActivity extends AppCompatActivity implements
     public void requestLogin(View v) {
         EditText emailView = findViewById(R.id.etEmail);
         EditText passwordView = findViewById(R.id.etPassword);
-
         String email = emailView.getText().toString().trim();
         String password = passwordView.getText().toString().trim();
+        user_name = email;
 
         if (email.length() == 0 || password.length() == 0) {
             Toast.makeText(getApplicationContext(), "Something is wrong. Please check your inputs.", Toast.LENGTH_LONG).show();
@@ -252,7 +253,11 @@ public class SignInActivity extends AppCompatActivity implements
                             if(result.get("errno").equals("0")) {
                                 Log.d("LOGIN", "Successful Login");
                               //  finish();//finishing activity and return to the calling activity.
-                                startActivity(new Intent(mContext, MainActivity.class));
+                                Intent intent = new Intent(mContext, MainActivity.class);
+                                intent.putExtra("User_name", user_name);
+                                System.out.println(user_name);
+                                mContext.startActivity(intent);
+                                //startActivity(new Intent(mContext, MainActivity.class));
                             } else if(result.get("errno").equals("4001")) {
                                 System.out.println("////I am here");
                                 responseTextLogin.setText(result.get("errmsg").toString());

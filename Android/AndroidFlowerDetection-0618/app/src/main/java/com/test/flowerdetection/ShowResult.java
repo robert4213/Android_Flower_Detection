@@ -1,12 +1,19 @@
 package com.test.flowerdetection;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Address;
 import android.location.Geocoder;
@@ -18,10 +25,15 @@ import android.provider.MediaStore;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
+import androidx.viewpager.widget.ViewPager;
 
+import android.provider.Telephony;
+import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,20 +44,27 @@ import com.android.volley.Response;
 import com.android.volley.error.VolleyError;
 import com.android.volley.request.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.tabs.TabLayout;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
 import static com.test.flowerdetection.MainActivity.db;
+import static com.test.flowerdetection.MainActivity.user_name;
 
 
 public class ShowResult extends AppCompatActivity {
@@ -54,6 +73,7 @@ public class ShowResult extends AppCompatActivity {
     private TextView wikiText;
     private Uri picUri;
     private String category;
+    private String all_category;
     private WebView webView;
     private int[] rect = new int[4];
     private RequestQueue requestQueue;
@@ -65,15 +85,34 @@ public class ShowResult extends AppCompatActivity {
     private static final int REQUEST_CODE = 101;
     Location currentLocation;
     Bitmap bitmap;
+    public static String link;
+    private ViewPager viewPager;
+    private TabLayout tabLayout;
+    private String file_key;
+    ViewPagerAdapter adapter;
+    ArrayList<byte[]> SubImagesList;
+    ArrayList<String> Categories;
+    TypeGridAdapter gridAdapter;
+    GridView gridView;
+    private String join_boxes;
+    private String join_categories;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_result);
 
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar.setTitle(getString(R.string.app_name));
+        mToolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24);
+
         Bundle bundle = getIntent().getExtras();
         picUri = (Uri) bundle.get("IMAGE_URI");
         box = (String) bundle.get("Box");
+        file_key = (String) bundle.get("FILE_KEY");
+
+        System.out.println("file key " + file_key);
 
         System.out.println("box2 " + box);
 
@@ -84,35 +123,76 @@ public class ShowResult extends AppCompatActivity {
             e.printStackTrace();
         }
         imageView = (ImageView) findViewById(R.id.res_img);
-        requestQueue = Volley.newRequestQueue(this);
         show_category = (TextView) findViewById(R.id.category);
 
-        webView = (WebView) findViewById(R.id.web_view);
-        webView.setWebViewClient(new WebViewClient());
+        gridView = (GridView) findViewById(R.id.res_grid);
 
         imageView.setImageBitmap(bitmap);
 
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                System.out.println("Change to MainActivity!");
+                Intent intent = new Intent(ShowResult.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
-        try {
-            show();
-        } catch (JSONException e) {
-            e.printStackTrace();
+        tabLayout = findViewById(R.id.tabs);
+        viewPager = findViewById(R.id.viewpager);
+        adapter = new ViewPagerAdapter(getSupportFragmentManager());
+
+        SubImagesList = new ArrayList<>();
+        Categories = new ArrayList<>();
+
+        all_category = "";
+        join_boxes = "";
+        join_categories = "";
+
+        //System.out.println("Test box: " + box.length());
+
+        if(box == null || box.length() < 10) {
+
+            System.out.println("Dialog pop up");
+            AlertDialog.Builder builder = new AlertDialog.Builder(ShowResult.this);
+            builder.setTitle("Error!")
+                    .setMessage("No Follower Detected. Please Try Another Image.")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(ShowResult.this, MainActivity.class);
+                            startActivity(intent);
+                        }
+                    });
+            // Create the Alert dialog
+            AlertDialog alertDialog = builder.create();
+
+            // Show the Alert Dialog box
+            alertDialog.show();
+
+        } else {
+
+            try {
+                test();
+                show_category.setText(all_category);
+
+                viewPager.setAdapter(adapter);
+                tabLayout.setupWithViewPager(viewPager);
+
+                gridAdapter = new TypeGridAdapter(this, R.layout.show_result_grid, SubImagesList, Categories);
+                gridView.setAdapter(gridAdapter);
+
+                LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+                fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+                getImgLocaiton();
+                System.out.println("Location after upload: " + latitude + longitude);
+                System.out.println("City: " + city);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
-
-        //jasonParse();
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[] {Manifest.permission.ACCESS_COARSE_LOCATION}, 1000);
-            return;
-        }
-
-
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        getImgLocaiton();
-        System.out.println("Location after upload: " + latitude + longitude);
-        System.out.println("City: " + city);
-
-
 
     }
 
@@ -153,45 +233,6 @@ public class ShowResult extends AppCompatActivity {
         return mutableBitmap;
     }
 
-//    public void jasonParse() {
-//        String url = "http://192.168.1.144:5000/data.json";
-//       JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-//            @Override
-//            public void onResponse(JSONObject response) {
-//                try {
-//                    String x = response.toString();
-//                    System.out.println("Response: " + x);
-//                    response = new JSONObject(
-//                            x
-//                    );
-//                    category = response.getString("type");
-//                    //
-//                   JSONObject box = response.getJSONObject("box");
-//                    rect[0] = box.getInt("top");
-//                    rect[1] = box.getInt("left");
-//                    rect[2] = box.getInt("bottom");
-//                    rect[3] = box.getInt("right");
-//                    show_category.setText(category);
-//                    BitmapDrawable drawable = (BitmapDrawable) imageView.getDrawable();
-//                    Bitmap drawableBitmap = drawable.getBitmap();
-//                    imageView.setImageBitmap(drawRectangles(drawableBitmap, rect));
-//                    webView.loadUrl("https://en.wikipedia.org/wiki/" + category);
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                    Toast.makeText(getApplicationContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
-//                }
-//
-//            }
-//
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
-//            }
-//        });
-//
-//        requestQueue.add(request);
-//    }
 
     public void show() throws JSONException {
         JSONObject response = new JSONObject(box);
@@ -203,11 +244,59 @@ public class ShowResult extends AppCompatActivity {
         rect[2] = box.getInt("bottom");
         rect[3] = box.getInt("right");
         show_category.setText(category);
+        link = response.getString("link");
         BitmapDrawable drawable = (BitmapDrawable) imageView.getDrawable();
         Bitmap drawableBitmap = drawable.getBitmap();
         imageView.setImageBitmap(drawRectangles(drawableBitmap, rect));
-        webView.loadUrl("https://en.wikipedia.org/wiki/" + category);
-        //db.addEntry(category, drawableBitmap, latitude, longitude, city);
+        System.out.println("Wiki Link" + link);
+        webView.loadUrl(link);
+    }
+
+    public void test() throws JSONException {
+        JSONObject response = new JSONObject(box);
+        JSONArray arr = response.getJSONArray("object");
+        for (int i = 0; i < arr.length(); i++) {
+            JSONObject jsonobject = arr.getJSONObject(i);
+            category = jsonobject.getString("type");
+            if(join_categories == "") {
+                join_categories = category;
+            } else {
+                join_categories += "," + category;
+            }
+
+            JSONObject box = jsonobject.getJSONObject("box");
+            rect[0] = box.getInt("top");
+            rect[1] = box.getInt("left");
+            rect[2] = box.getInt("bottom");
+            rect[3] = box.getInt("right");
+            link = jsonobject.getString("link");
+            String rect_string = rect[0] + "," + rect[1] + "," + rect[2] + "," + rect[3];
+            if(join_boxes == "") {
+                join_boxes = rect_string;
+            } else {
+                join_boxes += "|" + rect_string;
+            }
+
+            if(!Categories.contains(category)) {
+                adapter.addFragment(WebFragment.newInstance(link), category);
+                if(all_category == "") {
+                    all_category = category;} else {
+                    all_category += ", " + category;
+                }
+            }
+
+            BitmapDrawable drawable = (BitmapDrawable) imageView.getDrawable();
+            Bitmap drawableBitmap = drawable.getBitmap();
+            imageView.setImageBitmap(drawRectangles(drawableBitmap, rect));
+
+            Bitmap b = cutbitmap(rect, bitmap);
+
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            b.compress(Bitmap.CompressFormat.PNG, 0, stream);
+            byte[] image = stream.toByteArray();
+            SubImagesList.add(image);
+            Categories.add(category);
+        }
     }
 
     private void getImgLocaiton() {
@@ -219,13 +308,13 @@ public class ShowResult extends AppCompatActivity {
         task.addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
-                if (location != null) {
+                if (location != null && !checkfilekey(file_key)) {
                     currentLocation = location;
                     latitude = currentLocation.getLatitude();
                     longitude = currentLocation.getLongitude();
                     city = getCity(latitude,longitude);
                     System.out.println("Location upload: " + latitude + " , " + longitude + " " + city);
-                    db.addEntry(category, bitmap, latitude, longitude, city);
+                    db.addEntry(user_name, all_category, file_key, join_boxes, join_categories, bitmap, latitude, longitude, city);
                 }
             }
         });
@@ -250,6 +339,7 @@ public class ShowResult extends AppCompatActivity {
             case 101: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                        System.out.println("101 Permission Granted Location upload!");
                         getImgLocaiton();
                     }
                 } else {
@@ -259,6 +349,25 @@ public class ShowResult extends AppCompatActivity {
                 break;
             }
         }
+    }
+
+    private Bitmap cutbitmap(int[] rect, Bitmap bitmap) {
+        Bitmap origialBitmap = bitmap;
+        Bitmap cutBitmap = Bitmap.createBitmap(60,
+                60, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(cutBitmap);
+        Rect desRect = new Rect(0, 0, 60, 60);
+        Rect srcRect = new Rect(rect[1], rect[0], rect[3],
+                rect[2]);
+        canvas.drawBitmap(origialBitmap, srcRect, desRect, null);
+        return cutBitmap;
+    }
+
+    public boolean checkfilekey(String file_key) {
+        SQLiteDatabase DB = db.getWritableDatabase();
+        String sql = "SELECT * FROM user_img WHERE user_name='" + user_name + "' " + "AND file_key='" + file_key + "'";
+        Cursor cursor = DB.rawQuery(sql, null);
+        return cursor.getCount() == 0 ? false : true;
     }
 
 }

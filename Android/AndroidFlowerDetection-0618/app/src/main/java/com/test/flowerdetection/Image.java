@@ -199,7 +199,7 @@ public class Image extends AppCompatActivity implements GoogleApiClient.OnConnec
 
                         //上传图片
                         //Toast.makeText(Image.this,"Begin uploading"+f.getAbsolutePath(),Toast.LENGTH_LONG).show();
-                        imageUploadTask = new ImageUploadTask(Image.this, f, bitmap);
+                        imageUploadTask = new ImageUploadTask(Image.this, f, bitmap, filePath);
                         pgsBar.setVisibility(view.VISIBLE);
                         imageUploadTask.execute();
 
@@ -437,21 +437,6 @@ public class Image extends AppCompatActivity implements GoogleApiClient.OnConnec
             public boolean onMenuItemClick(MenuItem item) {
                 System.out.println("MenuItem selected: " + item.getItemId());
                 switch (item.getItemId()) {
-                    case R.id.ViewHis:
-                        System.out.println("ViewHis Select");
-                        Intent intent = new Intent(getApplicationContext(), image_list.class);
-                        startActivity(intent);
-                        return true;
-                    case R.id.Rating:
-                        System.out.println("Rating Select");
-                        Toast.makeText(getApplicationContext(), "Select Rating", Toast.LENGTH_SHORT).show();
-                        return true;
-                    case R.id.Contact:
-                        Toast.makeText(getApplicationContext(), "Select Contact Us", Toast.LENGTH_SHORT).show();
-                        return true;
-                    case R.id.test_menu:
-                        Toast.makeText(Image.this, "test", Toast.LENGTH_SHORT).show();
-                        return true;
                     case R.id.sign_out_menu:
                         mFirebaseAuth.signOut();
                         Auth.GoogleSignInApi.signOut(mGoogleApiClient);

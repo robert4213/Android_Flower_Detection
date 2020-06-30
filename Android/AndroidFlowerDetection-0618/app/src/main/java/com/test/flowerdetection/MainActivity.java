@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -27,10 +29,13 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -59,6 +64,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -82,6 +88,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     public static final int MEDIA_TYPE_VIDEO = 2;
 
     public static DataBaseHelper db;
+    public static String user_name;
+
+    //RelativeLayout r;
+    CoordinatorLayout r;
+
 
     // public static String BASE_URL = "http://192.168.1.144:8888/upload.php";
 //    private static final String IMGUR_CLIENT_ID = "123";
@@ -117,7 +128,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
 
-
+    GridView gridView;
+    public static ArrayList<Item> list;
+    ImageListAdapter adapter = null;
+    SQLiteDatabase DB;
+    DataBaseHelper helper;
 
 
     @Override
@@ -128,6 +143,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         ButterKnife.bind(this);
         mCompressor = new FileCompressor(this);
 
+        Bundle bundle = getIntent().getExtras();
+        if(bundle != null) {
+            user_name = bundle.getString("User_name");
+        }
+        System.out.println("MainActivity: " + user_name);
         db = new DataBaseHelper(this);
         db.queryData();
         //click event over FAB
@@ -168,6 +188,53 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         imageView = (ImageView) findViewById(R.id.imageView);
        // btnChoose = (Button) findViewById(R.id.button_choose);
         btnUpload = (Button) findViewById(R.id.button_upload);
+
+        //super.onCreate(savedInstanceState);
+        //setContentView(R.layout.activity_image_list);
+
+        gridView = (GridView) findViewById(R.id.ImgGridView);
+        list = new ArrayList<>();
+        adapter = new ImageListAdapter(this, R.layout.image_items, list);
+        gridView.setAdapter(adapter);
+
+        //get All data here:
+        //Cursor cursor = ShowResult.db.getData("SELECT * FROM DB_TABLE");
+        DB = db.getWritableDatabase();
+        String sql = "SELECT * FROM user_img WHERE user_name='" + user_name + "'";
+        Cursor cursor = DB.rawQuery(sql, null);
+
+        list.clear();
+        while (cursor.moveToNext()) {
+            String name = cursor.getString(cursor.getColumnIndex("image_name"));
+            String time = cursor.getString(cursor.getColumnIndex("time_stamp"));
+            String boxes = cursor.getString(cursor.getColumnIndex("image_boxes"));
+            String type_list = cursor.getString(cursor.getColumnIndex("image_type_list"));
+            byte[] image = cursor.getBlob(cursor.getColumnIndex("image_data"));
+            double lat = cursor.getDouble(cursor.getColumnIndex("loc_lat"));
+            double lon = cursor.getDouble(cursor.getColumnIndex("loc_lon"));
+            String city = cursor.getString(cursor.getColumnIndex("loc_city"));
+            String key = cursor.getString(cursor.getColumnIndex("file_key"));
+            list.add(new Item(name, image, time, boxes, type_list, lat, lon, city, key));
+        }
+        if(list.isEmpty()) {
+            r = (CoordinatorLayout) findViewById(R.id.main);
+            r.setBackgroundResource(R.drawable.no_his_background);
+        }
+        adapter.notifyDataSetChanged();
+
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(MainActivity.this, ImgItemDetail.class);
+                Item item = list.get(position);
+                Bundle bundle = new Bundle();
+                bundle.putInt("index", position);
+                intent.putExtras(bundle);
+                startActivity(intent);
+
+            }
+        });
 
         //get Location Permission
       //  bClick = (Button)findViewById(R.id.Bclick);
@@ -427,22 +494,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         System.out.println("!!!!!!!!!!!!!!!");
         Log.i("MENU","option menu clicked");
         switch (item.getItemId()) {
-
-            case R.id.ViewHis:
-                System.out.println("ViewHis Select");
-                Intent intent = new Intent(getApplicationContext(), image_list.class);
-                startActivity(intent);
-                return true;
-            case R.id.Rating:
-                System.out.println("Rating Select");
-                Toast.makeText(getApplicationContext(), "Select Rating", Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.Contact:
-                Toast.makeText(getApplicationContext(), "Select Contact Us", Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.test_menu:
-                Toast.makeText(this, "test", Toast.LENGTH_SHORT).show();
-                return true;
             case R.id.sign_out_menu:
                 Toast.makeText(this, "test", Toast.LENGTH_SHORT).show();
                 mFirebaseAuth.signOut();
@@ -617,18 +668,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             public boolean onMenuItemClick(MenuItem item) {
                 Log.i("MENU","bottom bar clicked");
                 switch (item.getItemId()) {
-                    case R.id.ViewHis:
-                        System.out.println("ViewHis Select");
-                        Intent intent = new Intent(getApplicationContext(), image_list.class);
-                        startActivity(intent);
-                        return true;
-                    case R.id.Rating:
-                        System.out.println("Rating Select");
-                        Toast.makeText(getApplicationContext(), "Select Rating", Toast.LENGTH_SHORT).show();
-                        return true;
-                    case R.id.Contact:
-                        Toast.makeText(getApplicationContext(), "Select Contact Us", Toast.LENGTH_SHORT).show();
-                        return true;
                     case R.id.sign_out_menu:
                         mFirebaseAuth.signOut();
                         Auth.GoogleSignInApi.signOut(mGoogleApiClient);
@@ -639,6 +678,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                         return true;
                     case R.id.action_map:
                         Intent i = new Intent(getApplicationContext(), Map.class);
+                        i.putExtra("User_name", user_name);
                         startActivity(i);
                         return true;
 

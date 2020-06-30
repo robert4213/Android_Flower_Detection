@@ -49,6 +49,7 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
 
     SQLiteDatabase DB;
     List<Item> Markerlist;
+    private String user_name;
 
 
     @Override
@@ -56,7 +57,12 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
+        Bundle bundle = getIntent().getExtras();
+        user_name = bundle.getString("User_name");
+
         DB = db.getWritableDatabase();
+
+        System.out.println("Map User Name: " + user_name);
 
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
@@ -142,7 +148,8 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
 
     public List<Item> getAllMarker(SQLiteDatabase DB) {
         List<Item> Markerlist = new ArrayList<>();
-        Cursor cursor = DB.rawQuery("SELECT * FROM user_img", null);
+        String sql = "SELECT * FROM user_img WHERE user_name='" + user_name + "'";
+        Cursor cursor = DB.rawQuery(sql, null);
         ArrayList<LatLng> markerCoordinates = new ArrayList<>();
         float COORDINATE_OFFSET = 0.000085f;
         int offsetType = 0;
@@ -150,14 +157,17 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
         while (cursor.moveToNext()) {
             String name = cursor.getString(cursor.getColumnIndex("image_name"));
             String time = cursor.getString(cursor.getColumnIndex("time_stamp"));
+            String boxes = cursor.getString(cursor.getColumnIndex("image_boxes"));
+            String type_list = cursor.getString(cursor.getColumnIndex("image_type_list"));
             byte[] image = cursor.getBlob(cursor.getColumnIndex("image_data"));
             double lat = cursor.getDouble(cursor.getColumnIndex("loc_lat"));
             double lon = cursor.getDouble(cursor.getColumnIndex("loc_lon"));
             String city = cursor.getString(cursor.getColumnIndex("loc_city"));
+            String key = cursor.getString(cursor.getColumnIndex("file_key"));
             LatLng old_cor = new LatLng(lat, lon);
             LatLng new_cor = getLatLng(old_cor, COORDINATE_OFFSET, offsetType, markerCoordinates);
             markerCoordinates.add(new_cor);
-            Markerlist.add(new Item(name, image, time, new_cor.latitude, new_cor.longitude, city));
+            Markerlist.add(new Item(name, image, time, boxes, type_list, new_cor.latitude, new_cor.longitude, city, key));
         }
         cursor.close();
         db.close();
