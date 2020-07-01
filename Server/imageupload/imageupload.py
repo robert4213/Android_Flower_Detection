@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, Flask, request, send_from_director
 from werkzeug.utils import secure_filename
 from server.model import predict
 from server import db
-from server.db_models import PredictHistory
+from server.db_models import PredictHistory, Species
 from datetime import datetime
 import json
 import os
@@ -45,36 +45,41 @@ def upload():
     boxes = predict.predict_species(upload_path)
     print(boxes)
     # Jsonify the result
-    result_dict = write_json_result(boxes)
+    result_dict = write_json_multiple_result(boxes)
     # TODO user_id 需要改成session["user_id"]
     # TODO species_id需要改成表中的id
     new_predict = PredictHistory(user_id=1, \
                                 species_id=1,\
-                                predict_time=datetime.now()
-                                )
-    write_predict_history(new_predict)
+                                predict_time=datetime.now())
     print(jsonify(result_dict))
     return jsonify(result_dict)
     # redirect to upload page
     return render_template('upload.html')
 
 # Transform the boxes into JSON
-def write_json_result(boxes):
+# Transform the boxes into JSON
+def write_json_multiple_result(boxes):
     if len(boxes) == 0: return
-    result_dic = {}
-    result_dic["type"] = boxes[0][0]
-    box = {}
-    box["top"] = boxes[0][1][0]
-    box["left"] = boxes[0][1][1]
-    box["bottom"] = boxes[0][1][2]
-    box["right"] = boxes[0][1][3]
-    result_dic["box"] = box
-    result_dic["score"] = str(boxes[0][2])
+    result_list = {}
+    result_list["object"] = []
+    for i in range(len(boxes)):
+        result_dic = {}
+        result_dic["type"] = boxes[i][0]
+        box = {}
+        box["top"] = boxes[i][1][0]
+        box["left"] = boxes[i][1][1]
+        box["bottom"] = boxes[i][1][2]
+        box["right"] = boxes[i][1][3]
+        result_dic["box"] = box
+        result_dic["score"] = str(boxes[i][2])
+        ## query external_link in database
+        result_dic["link"] = Species.query.filter_by(name=boxes[i][0].capitalize()).first().external_link
+        result_list["object"].append(result_dic)
     PATH = os.path.dirname(__file__)
     PARENT_PATH  = os.path.dirname(PATH)
-    with open(os.path.join(PARENT_PATH, 'static/data.json'), "w") as f:
-        json.dump(result_dic, f)
-    return result_dic
+    with open(os.path.join(PARENT_PATH, 'static/data1.json'), "w") as f:
+        json.dump(result_list, f)
+    return result_list
 
 
 def write_predict_history(new_predict):
