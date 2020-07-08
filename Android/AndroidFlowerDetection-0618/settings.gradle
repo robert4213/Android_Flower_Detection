@@ -1,2 +1,3 @@
 include ':app'
 rootProject.name = "Android-Flower-Detection"
+include ':openCVLibrary347'
