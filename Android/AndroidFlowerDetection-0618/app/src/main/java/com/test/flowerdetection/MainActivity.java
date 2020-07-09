@@ -5,6 +5,7 @@ import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -60,7 +61,6 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.opencv.android.OpenCVLoader;
 
 import java.io.File;
 import java.io.IOException;
@@ -73,20 +73,6 @@ import java.util.Locale;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
-    // Test open cv
-//     private static String TAG1 = "MainActivity";
-//     static {
-//         if(OpenCVLoader.initDebug()) {
-//             Log.d(TAG1, "OPen cv is configured or coneected Successfully");
-//         }
-//         else {
-//             Log.d(TAG1,"OPenCV not wordking or loaded");
-//         }
-//     }
-
-
-
-
     private BottomAppBar bottomAppBar;
     static final int REQUEST_TAKE_PHOTO = 1;
     static final int REQUEST_GALLERY_PHOTO = 2;
@@ -171,7 +157,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             public void onClick(View view) {
                 // Toast.makeText(MainActivity.this, "FAB Clicked.", Toast.LENGTH_SHORT).show();
 //                selectImage();
-                requestStoragePermission("camera");
+                requestStoragePermission(true);
             }
         });
 
@@ -297,24 +283,24 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     }
 
 
-//    // Select Image
-//    private void selectImage() {
-//        final CharSequence[] items = {
-//                "Take Photo", "Choose from Library",
-//                "Cancel"
-//        };
-//        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-//        builder.setItems(items, (dialog, item) -> {
-//            if (items[item].equals("Take Photo")) {
-//                requestStoragePermission(true);
-//            } else if (items[item].equals("Choose from Library")) {
-//                requestStoragePermission(false);
-//            } else if (items[item].equals("Cancel")) {
-//                dialog.dismiss();
-//            }
-//        });
-//        builder.show();
-//    }
+    // Select Image
+    private void selectImage() {
+        final CharSequence[] items = {
+                "Take Photo", "Choose from Library",
+                "Cancel"
+        };
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setItems(items, (dialog, item) -> {
+            if (items[item].equals("Take Photo")) {
+                requestStoragePermission(true);
+            } else if (items[item].equals("Choose from Library")) {
+                requestStoragePermission(false);
+            } else if (items[item].equals("Cancel")) {
+                dialog.dismiss();
+            }
+        });
+        builder.show();
+    }
 
 
     /**
@@ -322,7 +308,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
      * This uses multiple permission model from dexter
      * On permanent denial opens settings dialog
      */
-    private void requestStoragePermission(String method) {
+    private void requestStoragePermission(boolean isCamera) {
         Dexter.withActivity(this)
                 .withPermissions(Manifest.permission.READ_EXTERNAL_STORAGE,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
@@ -331,12 +317,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                     public void onPermissionsChecked(MultiplePermissionsReport report) {
                         // check if all permissions are granted
                         if (report.areAllPermissionsGranted()) {
-                            if (method.equals("camera")) {
+                            if (isCamera) {
                                 dispatchTakePictureIntent();
-                            } else if(method.equals("photo")){
+                            } else {
                                 dispatchGalleryIntent();
-                            } else if(method.equals("video")) {
-                                dispatchOpenCVIntent();
                             }
                         }
                         // check for permanent denial of any permission
@@ -384,22 +368,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     }
 
     /**
-     * strat open CV
-     **/
-    private void dispatchOpenCVIntent() {
-       // Intent intent = new Intent(MainActivity.this, OpenCVActivity.class);
-       // intent.putExtra("IMAGE_URI", picUri);
-     //   startActivity(intent);
-        System.out.println("ddddddddddd");
-        startActivity(new Intent(this, OpenCVActivity.class));
-    }
-//
-//    public void openNewActivity(){
-//        Intent intent = new Intent(MainActivity.this, ShowResult.class);
-//        intent.putExtra("IMAGE_URI", picUri);
-//        startActivity(intent);
-//    }
-    /**
      * Create file with current timestamp name
      *
      * @throws IOException
@@ -438,6 +406,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         Intent pickPhoto = new Intent(Intent.ACTION_PICK,
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         pickPhoto.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        System.out.println("///////");
+        System.out.println(pickPhoto);
         startActivityForResult(pickPhoto, REQUEST_GALLERY_PHOTO);
     }
     private void showSettingsDialog() {
@@ -526,10 +496,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         Log.i("MENU","option menu clicked");
         switch (item.getItemId()) {
             case R.id.sign_out_menu:
-
-
-
-
                 Toast.makeText(this, "test", Toast.LENGTH_SHORT).show();
                 mFirebaseAuth.signOut();
                 Auth.GoogleSignInApi.signOut(mGoogleApiClient);
@@ -540,7 +506,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 return true;
 
             case R.id.action_album:
-                requestStoragePermission("photo");
+                requestStoragePermission(false);
                 finish();
                 return true;
 
@@ -567,6 +533,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_TAKE_PHOTO) {
                 try {
+                    System.out.println("///////////////");
+                    System.out.println(mPhotoFile);
                     mPhotoFile = mCompressor.compressToFile(mPhotoFile);
                     Intent intent = new Intent(this, Image.class);
                     System.out.println(photoURI);
@@ -676,11 +644,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         return result;
     }
 
-//    public void openNewActivity(){
-//        Intent intent = new Intent(MainActivity.this, ShowResult.class);
-//        intent.putExtra("IMAGE_URI", picUri);
-//        startActivity(intent);
-//    }
+    public void openNewActivity(){
+        Intent intent = new Intent(MainActivity.this, ShowResult.class);
+        intent.putExtra("IMAGE_URI", picUri);
+        startActivity(intent);
+    }
 
 
     /*******************************************************************/
@@ -716,15 +684,16 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                         return true;
 
                     case R.id.action_album:
-                        requestStoragePermission("photo");
+                        requestStoragePermission(false);
                         return true;
 
                     case R.id.action_video:
-                        requestStoragePermission("video");
                         Toast.makeText(MainActivity.this, "Video clicked.", Toast.LENGTH_SHORT).show();
-                        break;
+                        Intent intent = new Intent(getApplicationContext(), Opencv_camera.class);
+                        startActivity(intent);
+                        return true;
                 }
-                return false;
+                return true;
             }
         });
 

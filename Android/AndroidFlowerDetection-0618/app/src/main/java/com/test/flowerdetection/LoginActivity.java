@@ -40,7 +40,8 @@ public class LoginActivity extends AppCompatActivity {
     ProgressDialog loading;
 
     Context mContext;
-    public static String postUrl = "http://10.0.2.2:5000/user/login";
+    //public static String postUrl = "http://10.0.2.2:5000/user/login";
+    public static String postUrl;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +49,8 @@ public class LoginActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         ButterKnife.bind(this);
         mContext = this;
+        postUrl = this.getString(R.string.posturl) + "/user/login";
+
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override

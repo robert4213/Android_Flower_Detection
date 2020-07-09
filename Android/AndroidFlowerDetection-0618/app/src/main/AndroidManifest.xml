@@ -10,13 +10,13 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
-    <uses-feature
-        android:name="android.hardware.camera"
-        android:required="false" />
-
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature android:name="android.hardware.camera" android:required="false"/>
+    <uses-feature android:name="android.hardware.camera.front" android:required="false"/>
+    <uses-feature android:name="android.hardware.camera.front.autofocus" android:required="false"/>
 
     <uses-feature android:name="android.hardware.camera.autofocus" />
     <uses-feature android:name="android.hardware.camera.flash" />
@@ -32,14 +32,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AndroidFlowerDetection"
         android:usesCleartextTraffic="true">
-        <activity
-            android:name=".OpenCV"
-            android:label="@string/title_activity_open_c_v"
-            android:theme="@style/Theme.AndroidFlowerDetection.AppBarOverlay"></activity>
+        <activity android:name=".Opencv_camera"></activity>
         <activity android:name=".Map" />
         <activity android:name=".ImgItemDetail" />
         <activity android:name=".ShowResult" />
-        <activity android:name=".OpenCVActivity" />
         <activity android:name=".Image" />
         <activity android:name=".SignInActivity">
             <intent-filter>
