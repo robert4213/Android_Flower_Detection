@@ -5,6 +5,7 @@ import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -688,9 +689,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
                     case R.id.action_video:
                         Toast.makeText(MainActivity.this, "Video clicked.", Toast.LENGTH_SHORT).show();
-                        break;
+                        Intent intent = new Intent(getApplicationContext(), Opencv_camera.class);
+                        startActivity(intent);
+                        return true;
                 }
-                return false;
+                return true;
             }
         });
 

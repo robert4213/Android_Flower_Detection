@@ -3,6 +3,7 @@ package com.test.flowerdetection;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -24,7 +25,9 @@ import static androidx.core.content.ContextCompat.startActivity;
 
 public class ImageUploadTask extends AsyncTask<String, Integer, String> {
 
-    private static final String BASE_URL = "http://10.0.2.2:5000/upload";
+    //private static final String BASE_URL = "http://10.0.2.2:5000/upload";
+
+    //private static final String BASE_URL = getString(R.string.posturl) + "/upload";
     private static final String IMGUR_CLIENT_ID = "123";
     private static final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
     private static final OkHttpClient client = new OkHttpClient.Builder()
@@ -52,6 +55,7 @@ public class ImageUploadTask extends AsyncTask<String, Integer, String> {
     @Override
     protected String doInBackground(String...params) {
         String predictResult = null;
+        String BASE_URL = mContext.getString(R.string.posturl) + "/upload";
         try {
             RequestBody requestBody = new MultipartBody.Builder()
                     .setType(MultipartBody.FORM)
@@ -59,6 +63,7 @@ public class ImageUploadTask extends AsyncTask<String, Integer, String> {
                     .addFormDataPart("file", UUID.randomUUID().toString() + ".png",
                             RequestBody.create(MEDIA_TYPE_PNG, f))
                     .build();
+            System.out.println("Baseurl: " + BASE_URL);
             System.out.println("Request Body is " + requestBody.toString());
             //设置为自己的ip地址 BASE_URL
             okhttp3.Request request = new okhttp3.Request.Builder()
