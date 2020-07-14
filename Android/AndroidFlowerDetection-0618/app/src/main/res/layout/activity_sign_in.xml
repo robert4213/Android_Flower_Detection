@@ -75,7 +75,15 @@
             android:text="REGISTER"
             android:background="@drawable/bg_rectangle_button"/>
 
-
+        <TextView
+            android:id="@+id/forgetPassword"
+            android:layout_marginTop="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FFF"
+            android:text="Forget Your Password?"
+            android:clickable="true"
+            android:layout_gravity="left"/>
         <ProgressBar
             android:id="@+id/pbProgress"
             android:layout_gravity="center"

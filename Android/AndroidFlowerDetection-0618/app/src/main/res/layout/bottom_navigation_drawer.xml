@@ -63,9 +63,12 @@
             android:layout_below="@+id/user_email"
             android:layout_marginTop="15dp"
             android:background="#447e7e7e" />
+
+
     </RelativeLayout>
 
     <!-- navigation view -->
+
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigation_view"
         android:layout_width="match_parent"

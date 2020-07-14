@@ -4,7 +4,12 @@
     <group android:checkableBehavior="none">
         <item
             android:id="@+id/nav01"
+            android:icon="@drawable/reset_password"
+            android:title="Reset Password" />
+        <item
+            android:id="@+id/nav02"
             android:icon="@drawable/ic_baseline_people_24"
-            android:title="Sign In" />
+            android:title="Sign Out" />
+
     </group>
 </menu>
