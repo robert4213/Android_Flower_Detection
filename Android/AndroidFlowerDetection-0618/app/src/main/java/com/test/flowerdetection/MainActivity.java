@@ -495,7 +495,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        System.out.println("!!!!!!!!!!!!!!!");
         Log.i("MENU","option menu clicked");
         switch (item.getItemId()) {
             case R.id.sign_out_menu:

@@ -2,6 +2,8 @@ package com.bottom.appbar.demo;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -10,6 +12,8 @@ import android.widget.ImageView;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.navigation.NavigationView;
+import com.test.flowerdetection.Forgetpassword;
+import com.test.flowerdetection.MainActivity;
 import com.test.flowerdetection.R;
 
 import androidx.annotation.NonNull;
@@ -21,8 +25,9 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
  */
 public class BottomSheetNavigationFragment extends BottomSheetDialogFragment {
 
-
+   static Context context;
     public static BottomSheetNavigationFragment newInstance() {
+         //context = main;
 
         Bundle args = new Bundle();
 
@@ -69,13 +74,20 @@ public class BottomSheetNavigationFragment extends BottomSheetDialogFragment {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                Intent in;
                 switch (item.getItemId()) {
+
                     case R.id.nav01:
+                        Intent intent = new Intent(getActivity(), Forgetpassword.class);
+                        startActivity(intent);
+                        break;
+                    case R.id.nav02:
                         break;
                 }
                 return false;
             }
         });
+
         closeButton = contentView.findViewById(R.id.close_image_view);
         closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
