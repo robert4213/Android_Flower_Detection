@@ -10,8 +10,9 @@ public class Item {
     private String boxes;
     private String type_list;
     private String key;
+    private String path;
 
-    public Item(String name, byte[] image, String date, String boxes, String type_list, double latitude, double longitude, String city,String key) {
+    public Item(String name, byte[] image, String date, String boxes, String type_list, double latitude, double longitude, String city,String key, String path) {
         this.name = name;
         this.image = image;
         this.boxes = boxes;
@@ -21,6 +22,7 @@ public class Item {
         this.longitude = longitude;
         this.city = city;
         this.key = key;
+        this.path = path;
     }
 
     public String getName() {
@@ -69,7 +71,11 @@ public class Item {
 
     public String getKey() {return key;}
 
-    public void setKey() {this.key = key;}
+    public void setKey(String key) {this.key = key;}
+
+    public String getPath() {return path;}
+
+    public void setPath(String path) {this.path = path;}
 
 }
 

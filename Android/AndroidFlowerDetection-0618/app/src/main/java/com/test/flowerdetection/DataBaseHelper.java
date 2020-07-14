@@ -28,6 +28,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     private static final String KEY_USER = "user_name";
     private static final String KEY_NAME = "image_name";
     private static final String KEY_IMAGE = "image_data";
+    private static final String KEY_PATH = "file_path";
     private static final String KEY_FILE = "file_key";
     private static final String KEY_BOXES = "image_boxes";
     private static final String KEY_TYPELIST = "image_type_list";
@@ -41,6 +42,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             KEY_USER + " TEXT," +
             KEY_NAME + " TEXT," +
             KEY_TIME + " TEXT," +
+            KEY_PATH + " TEXT," +
             KEY_FILE + " TEXT," +
             KEY_BOXES + " TEXT," +
             KEY_TYPELIST + " TEXT," +
@@ -53,6 +55,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             KEY_USER + " TEXT," +
             KEY_NAME + " TEXT," +
             KEY_TIME + " TEXT," +
+            KEY_PATH + " TEXT," +
             KEY_FILE + " TEXT," +
             KEY_BOXES + " TEXT," +
             KEY_TYPELIST + " TEXT," +
@@ -88,7 +91,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void addEntry( String user, String name,  String file_key, String boxes, String type_list, Bitmap bitmap, Double lat, Double lon, String city) throws SQLiteException {
+    public void addEntry( String user, String name,  String file_path, String file_key, String boxes, String type_list, Bitmap bitmap, Double lat, Double lon, String city) throws SQLiteException {
         SQLiteDatabase database = this.getWritableDatabase();
         ContentValues cv = new  ContentValues();
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -98,6 +101,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         Date date = new Date();
         cv.put(KEY_USER,  user);
         cv.put(KEY_NAME,    name);
+        cv.put(KEY_PATH, file_path);
         cv.put(KEY_FILE, file_key);
         cv.put(KEY_BOXES, boxes);
         cv.put(KEY_TYPELIST, type_list);

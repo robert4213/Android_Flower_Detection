@@ -98,6 +98,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     // public static String BASE_URL = "http://192.168.1.144:8888/upload.php";
 //    private static final String IMGUR_CLIENT_ID = "123";
 //    private static final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
+    //  http://192.168.42.80:5000
+    //  http://10.0.2.2:5000
     private static String BASE_URL = "http://192.168.1.144:5000/upload";
     static final int PICK_IMAGE_REQUEST = 1;
     static final int CAMERA_REQUEST = 1888;
@@ -215,7 +217,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             double lon = cursor.getDouble(cursor.getColumnIndex("loc_lon"));
             String city = cursor.getString(cursor.getColumnIndex("loc_city"));
             String key = cursor.getString(cursor.getColumnIndex("file_key"));
-            list.add(new Item(name, image, time, boxes, type_list, lat, lon, city, key));
+            String path = cursor.getString(cursor.getColumnIndex("file_path"));
+            list.add(new Item(name, image, time, boxes, type_list, lat, lon, city, key, path));
         }
         if(list.isEmpty()) {
             r = (CoordinatorLayout) findViewById(R.id.main);
