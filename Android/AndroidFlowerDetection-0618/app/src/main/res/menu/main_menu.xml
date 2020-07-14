@@ -3,17 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
 
-    <item
-        android:id="@+id/sign_out_menu"
-        android:title="@string/sign_out"
-        app:showAsAction="never"/>
 
     <item
         android:id="@+id/action_video"
         app:showAsAction="always"
         android:icon="@drawable/ic_baseline_videocam_24"
         android:title="@string/notification" />
-
     <item
         android:id="@+id/nothing1"
         app:showAsAction="always"
@@ -35,6 +30,11 @@
         app:showAsAction="always"
         android:icon="@drawable/ic_baseline_photo_album_24"
         android:title="@string/notification" />
+    <item
+        android:id="@+id/nothing4"
+        app:showAsAction="always"
+        android:title="@string/notification"
+        android:enabled="false"/>
 
     <item
         android:id="@+id/action_map"

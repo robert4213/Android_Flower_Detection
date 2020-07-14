@@ -89,6 +89,7 @@ dependencies {
     // code generator for view
     implementation "com.jakewharton:butterknife:$rootProject.butterKnifeVersion"
     annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.butterKnifeVersion"
+
 }
 
 apply plugin: 'com.google.gms.google-services'

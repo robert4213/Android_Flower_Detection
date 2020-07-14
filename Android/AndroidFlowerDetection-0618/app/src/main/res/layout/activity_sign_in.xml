@@ -3,23 +3,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_gradient"
+    android:background="@drawable/background"
     tools:context="com.test.flowerdetection.SignInActivity">
-
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:padding="16dp"
         android:orientation="vertical">
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:textSize="24sp"
-            android:textColor="#fff"
+            android:textColor="#FFC0CB"
             android:fontFamily="sans-serif"
             android:text="LOGIN"/>
 
@@ -29,11 +26,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Email"
-            android:textColorHint="#80FFFFFF"
             android:padding="8dp"
             android:inputType="textEmailAddress"
-            android:background="@drawable/bg_rectangle_edittext"
-            android:textColor="#80FFFFFF"/>
+            android:textColor="#000"/>
 
         <EditText
             android:id="@+id/etPassword"
@@ -41,11 +36,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Password"
-            android:textColorHint="#80FFFFFF"
+
             android:inputType="textPassword"
             android:padding="8dp"
-            android:background="@drawable/bg_rectangle_edittext"
-            android:textColor="#80FFFFFF"/>
+
+            android:textColor="#000"/>
 
         <Button
             android:id="@+id/btnLogin"
@@ -53,34 +48,31 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:background="@drawable/bg_rectangle_button"
-            android:backgroundTint="@color/white"
+            android:backgroundTint="#FFC0CB"
             android:text="LOG IN"
-            android:textColor="#FFF" />
-
-        <TextView
-            android:layout_marginTop="8dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#FFF"
-            android:fontFamily="cursive"
-            android:text="Not a user?"
-            android:layout_gravity="left"/>
+            android:textColor="#000" />
 
         <Button
             android:id="@+id/btnRegister"
             android:layout_marginTop="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#FFF"
+            android:textColor="#000"
             android:text="REGISTER"
             android:background="@drawable/bg_rectangle_button"/>
-
+        <TextView
+            android:layout_marginTop="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#808080"
+            android:text="Not a user?"
+            android:layout_gravity="left"/>
         <TextView
             android:id="@+id/forgetPassword"
             android:layout_marginTop="8dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#FFF"
+            android:textColor="#808080"
             android:text="Forget Your Password?"
             android:clickable="true"
             android:layout_gravity="left"/>

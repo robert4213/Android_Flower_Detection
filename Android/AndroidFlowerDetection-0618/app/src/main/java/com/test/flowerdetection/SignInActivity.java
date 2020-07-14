@@ -82,6 +82,7 @@ public class SignInActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
+
         pbProgress = findViewById(R.id.pbProgress);
         TextView forgetPassword = findViewById(R.id.forgetPassword);
         forgetPassword.setOnClickListener(new View.OnClickListener() {

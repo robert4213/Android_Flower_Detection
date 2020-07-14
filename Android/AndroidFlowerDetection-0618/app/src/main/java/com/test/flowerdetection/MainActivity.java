@@ -497,15 +497,15 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.i("MENU","option menu clicked");
         switch (item.getItemId()) {
-            case R.id.sign_out_menu:
-                Toast.makeText(this, "test", Toast.LENGTH_SHORT).show();
-                mFirebaseAuth.signOut();
-                Auth.GoogleSignInApi.signOut(mGoogleApiClient);
-                mUsername = ANONYMOUS;
-
-                startActivity(new Intent(this, SignInActivity.class));
-                finish();
-                return true;
+//            case R.id.sign_out_menu:
+//                Toast.makeText(this, "test", Toast.LENGTH_SHORT).show();
+//                mFirebaseAuth.signOut();
+//                Auth.GoogleSignInApi.signOut(mGoogleApiClient);
+//                mUsername = ANONYMOUS;
+//
+//                startActivity(new Intent(this, SignInActivity.class));
+//                finish();
+//                return true;
 
             case R.id.action_album:
                 requestStoragePermission(false);
@@ -671,14 +671,14 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             public boolean onMenuItemClick(MenuItem item) {
                 Log.i("MENU","bottom bar clicked");
                 switch (item.getItemId()) {
-                    case R.id.sign_out_menu:
-                        mFirebaseAuth.signOut();
-                        Auth.GoogleSignInApi.signOut(mGoogleApiClient);
-                        mUsername = ANONYMOUS;
-
-                        startActivity(new Intent(MainActivity.this, SignInActivity.class));
-                        finish();
-                        return true;
+//                    case R.id.sign_out_menu:
+//                        mFirebaseAuth.signOut();
+//                        Auth.GoogleSignInApi.signOut(mGoogleApiClient);
+//                        mUsername = ANONYMOUS;
+//
+//                        startActivity(new Intent(MainActivity.this, SignInActivity.class));
+//                        finish();
+//                        return true;
                     case R.id.action_map:
                         Intent i = new Intent(getApplicationContext(), Map.class);
                         i.putExtra("User_name", user_name);
