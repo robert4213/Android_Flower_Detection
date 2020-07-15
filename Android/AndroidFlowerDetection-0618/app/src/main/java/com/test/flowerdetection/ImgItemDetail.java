@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.ArrayList;
 
 import static com.test.flowerdetection.MainActivity.db;
@@ -39,6 +40,7 @@ public class ImgItemDetail extends AppCompatActivity {
     int[] rect = new int[4];
     private Object Menu;
     private String key;
+    private String path;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +58,7 @@ public class ImgItemDetail extends AppCompatActivity {
         String label = item.getName();
         String city = item.getCity();
         byte[] img = item.getImage();
+        path = item.getPath();
         key = item.getKey();
 
         String boxes = item.getBoxes();
@@ -66,8 +69,44 @@ public class ImgItemDetail extends AppCompatActivity {
         showlabel = (TextView) findViewById(R.id.img_label);
         showloc = (TextView) findViewById(R.id.img_loc);
 
-        Bitmap bmp = BitmapFactory.decodeByteArray(img, 0, img.length);
-        imageView.setImageBitmap(bmp);
+//        Bitmap bmp = BitmapFactory.decodeByteArray(img, 0, img.length);
+
+        File imgFile = new  File(path);
+
+        if(imgFile.exists()){
+
+            Bitmap bmp = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+
+            imageView.setImageBitmap(bmp);
+
+            SubImagesList = new ArrayList<>();
+            Categories = new ArrayList<>();
+
+            String[] types = type_list.split(",");
+
+            for(String i:types) {
+                Categories.add(i);
+            }
+
+            String[] box = boxes.split("\\|");
+            for(String b: box) {
+                String[] point = b.split(",");
+                for(int i = 0; i <= 3; i++) {
+                    rect[i] = Integer.parseInt(point[i]);
+
+                }
+                Bitmap bitmap = cutbitmap(rect, bmp);
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 0, stream);
+                byte[] image = stream.toByteArray();
+                SubImagesList.add(image);
+            }
+
+            gridAdapter = new TypeGridAdapter(this, R.layout.show_result_grid, SubImagesList, Categories);
+            gridView.setAdapter(gridAdapter);
+
+        }
+
         showtime.setText(time);
         showloc.setText(city);
         showlabel.setText(label);
@@ -87,37 +126,6 @@ public class ImgItemDetail extends AppCompatActivity {
                 finish();
             }
         });
-
-
-
-
-
-        SubImagesList = new ArrayList<>();
-        Categories = new ArrayList<>();
-
-        String[] types = type_list.split(",");
-
-        for(String i:types) {
-            Categories.add(i);
-        }
-
-        String[] box = boxes.split("\\|");
-        for(String b: box) {
-            String[] point = b.split(",");
-            for(int i = 0; i <= 3; i++) {
-                rect[i] = Integer.parseInt(point[i]);
-
-            }
-            Bitmap bitmap = cutbitmap(rect, bmp);
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 0, stream);
-            byte[] image = stream.toByteArray();
-            SubImagesList.add(image);
-        }
-
-        gridAdapter = new TypeGridAdapter(this, R.layout.show_result_grid, SubImagesList, Categories);
-        gridView.setAdapter(gridAdapter);
-
 
     }
 

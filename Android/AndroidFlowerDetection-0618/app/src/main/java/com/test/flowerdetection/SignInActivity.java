@@ -2,6 +2,7 @@ package com.test.flowerdetection;
 
 
 import android.app.ProgressDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -59,6 +60,8 @@ public class SignInActivity extends AppCompatActivity implements
     @BindView(R.id.btnLogin)
     Button btnLogin;
     @BindView(R.id.btnRegister) Button btnRegister;
+
+
     ProgressDialog loading;
 //    @BindView(R.id.etEmail)
 //    EditText etEmail;
@@ -69,8 +72,8 @@ public class SignInActivity extends AppCompatActivity implements
 //    ProgressDialog loading;
 
     Context mContext;
-    //public static String postUrl = "http://10.0.2.2:5000/user/login";
-    public static String postUrl;
+    public static String postUrl = "http://10.0.2.2:5000/user/login";
+    //public static String postUrl;
     // Firebase instance variables
     private FirebaseAuth mFirebaseAuth;
     private String user_name;
@@ -79,8 +82,19 @@ public class SignInActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
-        pbProgress = findViewById(R.id.pbProgress);
 
+        pbProgress = findViewById(R.id.pbProgress);
+        TextView forgetPassword = findViewById(R.id.forgetPassword);
+        forgetPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ComponentName componentname = new ComponentName(SignInActivity.this, Forgetpassword.class);
+                Intent intent = new Intent();
+                intent.setComponent(componentname);
+                startActivity(intent);
+
+            }
+        });
         // Assign fields
       //  mSignInButton = (SignInButton) findViewById(R.id.sign_in_button);
 
@@ -102,7 +116,7 @@ public class SignInActivity extends AppCompatActivity implements
 
         ButterKnife.bind(this);
         mContext = this;
-        postUrl = mContext.getString(R.string.posturl) + "/user/login";
+       // postUrl = mContext.getString(R.string.posturl) + "/user/login";
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override

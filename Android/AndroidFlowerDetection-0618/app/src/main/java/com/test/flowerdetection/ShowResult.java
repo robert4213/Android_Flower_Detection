@@ -89,6 +89,7 @@ public class ShowResult extends AppCompatActivity {
     private ViewPager viewPager;
     private TabLayout tabLayout;
     private String file_key;
+    private String file_path;
     ViewPagerAdapter adapter;
     ArrayList<byte[]> SubImagesList;
     ArrayList<String> Categories;
@@ -110,6 +111,7 @@ public class ShowResult extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         picUri = (Uri) bundle.get("IMAGE_URI");
         box = (String) bundle.get("Box");
+        file_path = (String) bundle.get("FILE_PATH");
         file_key = (String) bundle.get("FILE_KEY");
 
         System.out.println("file key " + file_key);
@@ -313,8 +315,9 @@ public class ShowResult extends AppCompatActivity {
                     latitude = currentLocation.getLatitude();
                     longitude = currentLocation.getLongitude();
                     city = getCity(latitude,longitude);
+                    Bitmap bmp = Bitmap.createScaledBitmap(bitmap, 128, 128, false);
                     System.out.println("Location upload: " + latitude + " , " + longitude + " " + city);
-                    db.addEntry(user_name, all_category, file_key, join_boxes, join_categories, bitmap, latitude, longitude, city);
+                    db.addEntry(user_name, all_category, file_path, file_key, join_boxes, join_categories, bmp, latitude, longitude, city);
                 }
             }
         });

@@ -164,10 +164,11 @@ public class Map extends FragmentActivity implements OnMapReadyCallback {
             double lon = cursor.getDouble(cursor.getColumnIndex("loc_lon"));
             String city = cursor.getString(cursor.getColumnIndex("loc_city"));
             String key = cursor.getString(cursor.getColumnIndex("file_key"));
+            String path = cursor.getString(cursor.getColumnIndex("file_path"));
             LatLng old_cor = new LatLng(lat, lon);
             LatLng new_cor = getLatLng(old_cor, COORDINATE_OFFSET, offsetType, markerCoordinates);
             markerCoordinates.add(new_cor);
-            Markerlist.add(new Item(name, image, time, boxes, type_list, new_cor.latitude, new_cor.longitude, city, key));
+            Markerlist.add(new Item(name, image, time, boxes, type_list, new_cor.latitude, new_cor.longitude, city, key, path));
         }
         cursor.close();
         db.close();

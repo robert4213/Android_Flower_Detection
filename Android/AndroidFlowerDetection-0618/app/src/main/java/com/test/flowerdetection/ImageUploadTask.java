@@ -94,6 +94,7 @@ public class ImageUploadTask extends AsyncTask<String, Integer, String> {
         Intent intent = new Intent(mContext, ShowResult.class);
         intent.putExtra("IMAGE_URI",bitmap);
         intent.putExtra("Box", s);
+        intent.putExtra("FILE_PATH", filepath);
         System.out.println("Box: " + s);
         String[] file_elements = filepath.split("/");
         String file_key = file_elements[file_elements.length - 1];

@@ -437,13 +437,13 @@ public class Image extends AppCompatActivity implements GoogleApiClient.OnConnec
             public boolean onMenuItemClick(MenuItem item) {
                 System.out.println("MenuItem selected: " + item.getItemId());
                 switch (item.getItemId()) {
-                    case R.id.sign_out_menu:
-                        mFirebaseAuth.signOut();
-                        Auth.GoogleSignInApi.signOut(mGoogleApiClient);
-                        mUsername = ANONYMOUS;
-                        startActivity(new Intent(Image.this, SignInActivity.class));
-                        finish();
-                        return true;
+//                    case R.id.sign_out_menu:
+//                        mFirebaseAuth.signOut();
+//                        Auth.GoogleSignInApi.signOut(mGoogleApiClient);
+//                        mUsername = ANONYMOUS;
+//                        startActivity(new Intent(Image.this, SignInActivity.class));
+//                        finish();
+//                        return true;
 //                    case R.id.action_notification:
 //                        Toast.makeText(Image.this, "Notification clicked.", Toast.LENGTH_SHORT).show();
 //                        break;
