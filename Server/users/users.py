@@ -1,11 +1,11 @@
 from flask import Blueprint, current_app, session, request, jsonify
 from werkzeug.utils import secure_filename
 from sqlalchemy.exc import IntegrityError
+from datetime import datetime
 from server import db
 from server.utils import response_code
 from server.db_models import User, LoginHistory
 import json
-from datetime import datetime
 import re
 import os
 

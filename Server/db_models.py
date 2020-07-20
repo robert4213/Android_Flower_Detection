@@ -49,8 +49,8 @@ class User(db.Model, UserMixin):
         return check_password_hash(self.password_hash, password)
 
     def __repr__(self):
-        return "username: {}, email: {}, mobile: {}, registration_time: {}". \
-                    format(self.username, self.email, self.mobile, self.registration_time)
+        return "username: {}, email: {}, mobile: {}, registration_time: {}, password: {}". \
+                    format(self.username, self.email, self.mobile, self.registration_time, self.password)
 
     def change_password(self, password):
         self.password_hash = generate_password_hash(password)

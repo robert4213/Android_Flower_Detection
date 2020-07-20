@@ -42,8 +42,12 @@ def upload():
     f.save(upload_path)
     print(upload_path)
     # Run the machinle learning prediction model
-    boxes = predict.predict_species(upload_path)
+    # boxes = predict.predict_species(upload_path)
+
+    # TODO Test deployment in Server
+    boxes = [['rose', [-12, 71, 427, 436], 0.97550285]]
     print(boxes)
+    os.remove(upload_path)
     # Jsonify the result
     result_dict = write_json_multiple_result(boxes)
     # TODO user_id 需要改成session["user_id"]
