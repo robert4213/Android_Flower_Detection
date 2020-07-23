@@ -103,8 +103,6 @@ public class Forgetpassword extends AppCompatActivity {
                 try {
                     final String responseString = response.body().string().trim();
                     JSONObject result = new JSONObject(responseString);
-
-
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -124,7 +122,7 @@ public class Forgetpassword extends AppCompatActivity {
                                 } else if(!result.get("errno").equals("0")) {
                                     System.out.println(result.toString());
                                     TextView responseText = findViewById(R.id.responseTextRegister);
-                                    responseText.setText(result.get("errmsg").toString());
+                                     responseText.setText(result.get("errmsg").toString());
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();

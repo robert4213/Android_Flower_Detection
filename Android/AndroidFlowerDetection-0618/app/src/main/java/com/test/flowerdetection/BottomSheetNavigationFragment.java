@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -15,6 +16,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.test.flowerdetection.Forgetpassword;
 import com.test.flowerdetection.MainActivity;
 import com.test.flowerdetection.R;
+import com.test.flowerdetection.SharedPrefManager;
 
 import androidx.annotation.NonNull;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
@@ -26,9 +28,13 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 public class BottomSheetNavigationFragment extends BottomSheetDialogFragment {
 
    static Context context;
-    public static BottomSheetNavigationFragment newInstance() {
-         //context = main;
+    private static String email;
+    private static String name;
 
+    public static BottomSheetNavigationFragment newInstance(String Email) {
+         //context = main;
+        email = Email;
+        //name = Name;
         Bundle args = new Bundle();
 
         BottomSheetNavigationFragment fragment = new BottomSheetNavigationFragment();
@@ -65,7 +71,12 @@ public class BottomSheetNavigationFragment extends BottomSheetDialogFragment {
     public void setupDialog(Dialog dialog, int style) {
         super.setupDialog(dialog, style);
         //Get the content View
+
         View contentView = View.inflate(getContext(), R.layout.bottom_navigation_drawer, null);
+        TextView tv1 = (TextView) contentView.findViewById(R.id.user_email);
+        TextView tv2 = (TextView) contentView.findViewById(R.id.user_name);
+        tv1.setText(email);
+       // tv2.setText(name);
         dialog.setContentView(contentView);
 
         NavigationView navigationView = contentView.findViewById(R.id.navigation_view);
@@ -82,6 +93,7 @@ public class BottomSheetNavigationFragment extends BottomSheetDialogFragment {
                         startActivity(intent);
                         break;
                     case R.id.nav02:
+                        SharedPrefManager.getInstance(context).logout();
                         break;
                 }
                 return false;

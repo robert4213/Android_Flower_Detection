@@ -457,7 +457,8 @@ public class Image extends AppCompatActivity implements GoogleApiClient.OnConnec
             @Override
             public void onClick(View view) {
                 //open bottom sheet
-                BottomSheetDialogFragment bottomSheetDialogFragment = com.bottom.appbar.demo.BottomSheetNavigationFragment.newInstance();
+                User user = SharedPrefManager.getInstance(getApplicationContext()).getUser();
+                BottomSheetDialogFragment bottomSheetDialogFragment = com.bottom.appbar.demo.BottomSheetNavigationFragment.newInstance(user.getEmail());
                 bottomSheetDialogFragment.show(getSupportFragmentManager(), "Bottom Sheet Dialog Fragment");
             }
         });
