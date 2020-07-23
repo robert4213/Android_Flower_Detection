@@ -1,13 +1,15 @@
 from flask import Blueprint, current_app, session, request, jsonify
+from flask_login import login_required
 from werkzeug.utils import secure_filename
 from sqlalchemy.exc import IntegrityError
+from datetime import datetime
 from server import db
 from server.utils import response_code
 from server.db_models import User, LoginHistory
 import json
-from datetime import datetime
 import re
 import os
+import uuid
 
 
 user_blueprint = Blueprint('user', __name__)
@@ -68,9 +70,6 @@ def register():
         current_app.logger.error(e)
         return jsonify(errno=response_code.RET.DATAERR, errmsg="Database Error!")
 
-    session["username"] = username
-    session["email"] = email
-    session["user_id"] = user.id
 
     return jsonify(errno=response_code.RET.OK, errmsg="Successfully registered")
 
@@ -105,10 +104,9 @@ def login():
         write_login_history(new_login)
         return jsonify(errno=response_code.RET.DBERR, errmsg="Incorrect Password")
 
-    session["email"] = email
-    session["username"] = user.username
-    session["user_id"] = user.id
-
+    # Generate a session_id for login user
+    session_id = str(uuid.uuid4())
+    session[session_id] = email
     # write login history
     new_login = LoginHistory(user.id, \
                             ip_address=request.environ['REMOTE_ADDR'], \
@@ -118,7 +116,9 @@ def login():
 
     write_login_history(new_login)
 
-    return jsonify(errno=response_code.RET.OK, errmsg="Login Successful")
+    return jsonify(errno=response_code.RET.OK, \
+                   errmsg="Login Successful", \
+                   session_id=session_id)
 
 
 def write_login_history(new_login):
@@ -131,20 +131,29 @@ def write_login_history(new_login):
 
 
 # check_login
-@user_blueprint.route('/check_login', methods=['GET'])
+@user_blueprint.route('/check_login', methods=['POST'])
 def check_login():
-    email = session.get("email")
+    req_dict = request.get_json()
+    if not req_dict.get("session_id"):
+        return jsonify(errno=response_code.RET.SESSIONERR, \
+                       errmsg="no user login")
+    session_id = req_dict.get("session_id")
+    email = session.get(session_id)
     if email:
-        return jsonify(errno=response_code.RET.OK, errmsg="true", data={"email":email})
+        return jsonify(errno=response_code.RET.OK, \
+                       errmsg="true", \
+                       email=session[session_id])
     else:
-        return jsonify(errno=response_code.RET.SESSIONERR, errmsg="not login")
+        return jsonify(errno=response_code.RET.SESSIONERR, errmsg="no user login")
 
 # log out
-@user_blueprint.route('/logout', methods=['DELETE'])
+@user_blueprint.route('/logout', methods=['POST'])
 def logout():
-    csrf_token = session.get("csrf_token")
-    session.clear()
-    session["csrf_token"] = csrf_token
+    req_dict = request.get_json()
+    if not req_dict.get("session_id"):
+        return jsonify(errno=response_code.RET.SESSIONERR, errmsg="no user login")
+    session_id = req_dict.get("session_id")
+    del session[session_id]
     return jsonify(errno=response_code.RET.OK, errmsg="OK")
 
 # change password
@@ -152,16 +161,16 @@ def logout():
 def change_password():
     # get dictionary from json from request
     req_dict = request.get_json()
-
-    if not session.get("user_id"):
-        return jsonify(errno=response_code.RET.SESSIONERR, errmsg="not login")
-
+    if not req_dict.get("session_id"):
+        return jsonify(errno=response_code.RET.SESSIONERR, errmsg="no user login")
+    session_id = req_dict.get("session_id")
     current_password = req_dict.get("current_password")
     new_password = req_dict.get("new_password")
     new_password2 = req_dict.get("new_password2")
-
+    print("request recieved")
     try:
-        user = User.query.filter_by(id=session.get("user_id")).first()
+        user = User.query.filter_by(email=session[session_id]).first()
+        print(session[session_id])
     except Exception as e:
         current_app.logger.error(e)
         return jsonify(errno=response_code.RET.DBERR, errmsg="Query User Failed")
