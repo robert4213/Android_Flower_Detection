@@ -15,7 +15,7 @@ app = Flask(__name__)
 ROOT_PATH = app.root_path
 
 # Often people will also separate these into a separate config.py file
-app.config['SECRET_KEY'] = 'mysecretkey'
+app.config['SECRET_KEY'] = 'CMPE295B'
 basedir = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'data.sqlite')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -31,7 +31,7 @@ Migrate(app,db)
 login_manager.init_app(app)
 
 # Tell users what view to go to when they need to login.
-login_manager.login_view = "login"
+login_manager.login_view = "user.login"
 
 ## !! These imports need to come after you've defined db, otherwise you will
 # get errors in your models.py files.

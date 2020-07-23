@@ -65,6 +65,7 @@ class User(db.Model, UserMixin):
         self.mobile = mobile
 
 
+
 ##############
 ## Model - LoginHistory
 ##############
