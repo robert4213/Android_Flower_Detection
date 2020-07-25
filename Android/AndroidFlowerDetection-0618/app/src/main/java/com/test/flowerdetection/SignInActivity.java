@@ -220,7 +220,9 @@ public class SignInActivity extends AppCompatActivity implements
             loginForm.put("subject", "login");
             loginForm.put("email", email);
             loginForm.put("password", password);
-            user = new User(email);
+            user = new User(email,"");
+
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -272,6 +274,9 @@ public class SignInActivity extends AppCompatActivity implements
                             if(result.get("errno").equals("0")) {
                                 Log.d("LOGIN", "Successful Login");
                               //  finish();//finishing activity and return to the calling activity.
+                                System.out.println(result.get("session_id").toString());
+                                user.setId(result.get("session_id").toString());
+                                SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
                                 Intent intent = new Intent(mContext, MainActivity.class);
                                 intent.putExtra("User_name", user_name);
                                 System.out.println(user_name);
