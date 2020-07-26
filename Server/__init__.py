@@ -5,6 +5,8 @@ from flask_migrate import Migrate, MigrateCommand
 from flask_login import LoginManager
 from flask_mail import Mail
 from datetime import timedelta
+import sys
+sys.path.append('./yolov4')
 # import server.imageupload.imageupload
 
 
@@ -13,6 +15,11 @@ login_manager = LoginManager()
 
 app = Flask(__name__)
 ROOT_PATH = app.root_path
+
+print("ROOT_PATH: ")
+print(ROOT_PATH)
+print("sys.path: ")
+print(sys.path)
 
 # Often people will also separate these into a separate config.py file
 app.config['SECRET_KEY'] = 'CMPE295B'
@@ -32,6 +39,9 @@ login_manager.init_app(app)
 
 # Tell users what view to go to when they need to login.
 login_manager.login_view = "user.login"
+
+# Session dictionary
+MY_SESSION = {}
 
 ## !! These imports need to come after you've defined db, otherwise you will
 # get errors in your models.py files.

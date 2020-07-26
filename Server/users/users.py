@@ -1,9 +1,9 @@
-from flask import Blueprint, current_app, session, request, jsonify
+from flask import Blueprint, current_app, request, jsonify
 from flask_login import login_required
 from werkzeug.utils import secure_filename
 from sqlalchemy.exc import IntegrityError
 from datetime import datetime
-from server import db
+from server import db, MY_SESSION
 from server.utils import response_code
 from server.db_models import User, LoginHistory
 import json
@@ -33,7 +33,6 @@ def register():
     for ele in users:
         print(ele)
     print("Done printing all users in db")
-
     print("request, email: {}, username: {}\
             mobile: {}, password: {}, password2: {}".\
             format(email, username, mobile, password, password2))
@@ -106,7 +105,8 @@ def login():
 
     # Generate a session_id for login user
     session_id = str(uuid.uuid4())
-    session[session_id] = email
+    MY_SESSION[session_id] = email
+    print(MY_SESSION)
     # write login history
     new_login = LoginHistory(user.id, \
                             ip_address=request.environ['REMOTE_ADDR'], \
@@ -138,11 +138,11 @@ def check_login():
         return jsonify(errno=response_code.RET.SESSIONERR, \
                        errmsg="no user login")
     session_id = req_dict.get("session_id")
-    email = session.get(session_id)
+    email = MY_SESSION.get(session_id)
     if email:
         return jsonify(errno=response_code.RET.OK, \
                        errmsg="true", \
-                       email=session[session_id])
+                       email=MY_SESSION[session_id])
     else:
         return jsonify(errno=response_code.RET.SESSIONERR, errmsg="no user login")
 
@@ -150,10 +150,11 @@ def check_login():
 @user_blueprint.route('/logout', methods=['POST'])
 def logout():
     req_dict = request.get_json()
+    # print(MY_SESSION)
     if not req_dict.get("session_id"):
         return jsonify(errno=response_code.RET.SESSIONERR, errmsg="no user login")
     session_id = req_dict.get("session_id")
-    del session[session_id]
+    del MY_SESSION[session_id]
     return jsonify(errno=response_code.RET.OK, errmsg="OK")
 
 # change password
@@ -161,16 +162,17 @@ def logout():
 def change_password():
     # get dictionary from json from request
     req_dict = request.get_json()
+    # print(req_dict)
     if not req_dict.get("session_id"):
         return jsonify(errno=response_code.RET.SESSIONERR, errmsg="no user login")
     session_id = req_dict.get("session_id")
     current_password = req_dict.get("current_password")
     new_password = req_dict.get("new_password")
     new_password2 = req_dict.get("new_password2")
-    print("request recieved")
+    # print(MY_SESSION)
+    # print(MY_SESSION[session_id])
     try:
-        user = User.query.filter_by(email=session[session_id]).first()
-        print(session[session_id])
+        user = User.query.filter_by(email=MY_SESSION[session_id]).first()
     except Exception as e:
         current_app.logger.error(e)
         return jsonify(errno=response_code.RET.DBERR, errmsg="Query User Failed")
