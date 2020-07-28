@@ -103,34 +103,34 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
     //  http://10.0.2.2:5000
     private static String BASE_URL = "http://192.168.1.144:5000/upload";
     static final int PICK_IMAGE_REQUEST = 1;
-    static final int CAMERA_REQUEST = 1888;
-    private String filePath;
-    private File f;
-    private Uri picUri;
-    private ImageUploadTask imageUploadTask;
-
-    private static final int REQUEST_INVITE = 1;
-    private static final int REQUEST_IMAGE = 2;
-    private static final String LOADING_IMAGE_URL = "https://www.google.com/images/spin-32.gif";
-    public static final int DEFAULT_MSG_LENGTH_LIMIT = 10;
-    public static final String ANONYMOUS = "anonymous";
-    private static final String MESSAGE_SENT_EVENT = "message_sent";
-    private String mUsername;
-    private String mPhotoUrl;
-    private SharedPreferences mSharedPreferences;
-    private GoogleApiClient mGoogleApiClient;
-    private static final String MESSAGE_URL = "http://friendlychat.firebase.google.com/message/";
-
-    private Button mSendButton;
-    private RecyclerView mMessageRecyclerView;
-    private LinearLayoutManager mLinearLayoutManager;
-    private ProgressBar mProgressBar;
-    private EditText mMessageEditText;
-    private ImageView mAddMessageImageView;
-
-    // Firebase instance variables
-    private FirebaseAuth mFirebaseAuth;
-    private FirebaseUser mFirebaseUser;
+//    static final int CAMERA_REQUEST = 1888;
+//    private String filePath;
+//    private File f;
+//    private Uri picUri;
+//    private ImageUploadTask imageUploadTask;
+//
+//    private static final int REQUEST_INVITE = 1;
+//    private static final int REQUEST_IMAGE = 2;
+//    private static final String LOADING_IMAGE_URL = "https://www.google.com/images/spin-32.gif";
+//    public static final int DEFAULT_MSG_LENGTH_LIMIT = 10;
+//    public static final String ANONYMOUS = "anonymous";
+//    private static final String MESSAGE_SENT_EVENT = "message_sent";
+//    private String mUsername;
+//    private String mPhotoUrl;
+//    private SharedPreferences mSharedPreferences;
+//    private GoogleApiClient mGoogleApiClient;
+//    private static final String MESSAGE_URL = "http://friendlychat.firebase.google.com/message/";
+//
+//    private Button mSendButton;
+//    private RecyclerView mMessageRecyclerView;
+//    private LinearLayoutManager mLinearLayoutManager;
+//    private ProgressBar mProgressBar;
+//    private EditText mMessageEditText;
+//    private ImageView mAddMessageImageView;
+//
+//    // Firebase instance variables
+//    private FirebaseAuth mFirebaseAuth;
+//    private FirebaseUser mFirebaseUser;
 
     GridView gridView;
     public static ArrayList<Item> list;
@@ -158,36 +158,17 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Toast.makeText(MainActivity.this, "FAB Clicked.", Toast.LENGTH_SHORT).show();
-//                selectImage();
                 requestStoragePermission(true);
             }
         });
 
 
         // Set default username is anonymous.
-        /* google login commment for temporary
-        mUsername = ANONYMOUS;
 
-        // Initialize Firebase Auth
-        mFirebaseAuth = FirebaseAuth.getInstance();
-        mFirebaseUser = mFirebaseAuth.getCurrentUser();
-
-        System.out.println("!!!!!!!!!!!!!mFirebaseUser" + mFirebaseUser);
-        if (mFirebaseUser == null) {
-            // Not signed in, launch the Sign In activity
-            startActivity(new Intent(this, SignInActivity.class));
-            finish();
-            return;
-        } else {
-            mUsername = mFirebaseUser.getDisplayName();
-            System.out.println("mUsername :" + mUsername);
-        }
-*/
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
-                .addApi(Auth.GOOGLE_SIGN_IN_API)
-                .build();
+//        mGoogleApiClient = new GoogleApiClient.Builder(this)
+//                .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
+//                .addApi(Auth.GOOGLE_SIGN_IN_API)
+//                .build();
 
         imageView = (ImageView) findViewById(R.id.imageView);
        // btnChoose = (Button) findViewById(R.id.button_choose);
@@ -241,49 +222,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             }
         });
 
-        //get Location Permission
-      //  bClick = (Button)findViewById(R.id.Bclick);
-
-//        //For camera
-//        bClick.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//
-//                picUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
-//                startActivityForResult(cameraIntent,CAMERA_REQUEST);
-//            }
-//        });
-
-
-//        btnChoose.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                imageBrowse();
-//            }
-//        });
-
-//        btnUpload.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (filePath != null) {
-////                    imageUpload(filePath);
-//                    System.out.println("Image file path is: " + filePath);
-//                    f = new File(filePath);
-//                    try {
-//                        //上传图片
-//                        Toast.makeText(MainActivity.this,"Begin uploading"+f.getAbsolutePath(),Toast.LENGTH_LONG).show();
-//                        imageUploadTask = new ImageUploadTask(f);
-//                        imageUploadTask.execute();
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-//                } else {
-//                    Toast.makeText(getApplicationContext(), "Image not selected!", Toast.LENGTH_LONG).show();
-//                }
-//                openNewActivity();
-//            }
-//        });
     }
 
 
@@ -412,8 +350,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         Intent pickPhoto = new Intent(Intent.ACTION_PICK,
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         pickPhoto.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        System.out.println("///////");
-        System.out.println(pickPhoto);
         startActivityForResult(pickPhoto, REQUEST_GALLERY_PHOTO);
     }
     private void showSettingsDialog() {
@@ -489,26 +425,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         return true;
     }
 
-//    //Inflate menu to bottom bar
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.main_menu, menu);
-//        return super.onCreateOptionsMenu(menu);
-//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.i("MENU","option menu clicked");
         switch (item.getItemId()) {
-//            case R.id.sign_out_menu:
-//                Toast.makeText(this, "test", Toast.LENGTH_SHORT).show();
-//                mFirebaseAuth.signOut();
-//                Auth.GoogleSignInApi.signOut(mGoogleApiClient);
-//                mUsername = ANONYMOUS;
-//
-//                startActivity(new Intent(this, SignInActivity.class));
-//                finish();
-//                return true;
 
             case R.id.action_album:
                 requestStoragePermission(false);
@@ -548,12 +469,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-//                Glide.with(MainActivity.this)
-//                        .load(mPhotoFile)
-//                        .apply(new RequestOptions().centerCrop()
-//                                .circleCrop()
-//                              .placeholder(R.drawable.ic_launcher_background))
-//                        .into(imageView);
             } else if (requestCode == REQUEST_GALLERY_PHOTO) {
                 Uri selectedImage = data.getData();
                 try {
@@ -564,74 +479,41 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-//                Glide.with(MainActivity.this)
-//                        .load(mPhotoFile)
-//                        .apply(new RequestOptions().centerCrop()
-//                                .circleCrop()
-//                                .placeholder(R.drawable.ic_launcher_background))
-//                        .into(imageView);
             }
         }
     }
 
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
+
+//    private void imageUpload(final String imagePath) {
 //
-//        if (resultCode == RESULT_OK) {
+//        SimpleMultiPartRequest smr = new SimpleMultiPartRequest(Request.Method.POST, BASE_URL,
+//                new Response.Listener<String>() {
+//                    @Override
+//                    public void onResponse(String response) {
+//                        Log.d("Response", response);
+//                        try {
+//                            JSONObject jObj = new JSONObject(response);
+//                            String message = jObj.getString("message");
 //
-//            if(requestCode == PICK_IMAGE_REQUEST){
-//                picUri = data.getData();
+//                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
 //
-//
-//                filePath = getPath(picUri);
-//
-//                Log.d("picUri", picUri.toString());
-//                Log.d("filePath", filePath);
-//
-//                imageView.setImageURI(picUri);
-//
+//                        } catch (JSONException e) {
+//                            // JSON error
+//                            e.printStackTrace();
+//                            Toast.makeText(getApplicationContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+//                        }
+//                    }
+//                }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
 //            }
+//        });
 //
-//            if(requestCode == CAMERA_REQUEST) {
-//                Bundle bundle  = data.getExtras();
-//                final Bitmap bmp = (Bitmap) bundle.get("data");
-//                imageView.setImageBitmap(bmp);
-//            }
-//
-//        }
+//        smr.addFile("image", imagePath);
+//        MyApplication.getInstance().addToRequestQueue(smr);
 //
 //    }
-
-    private void imageUpload(final String imagePath) {
-
-        SimpleMultiPartRequest smr = new SimpleMultiPartRequest(Request.Method.POST, BASE_URL,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.d("Response", response);
-                        try {
-                            JSONObject jObj = new JSONObject(response);
-                            String message = jObj.getString("message");
-
-                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-
-                        } catch (JSONException e) {
-                            // JSON error
-                            e.printStackTrace();
-                            Toast.makeText(getApplicationContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
-
-        smr.addFile("image", imagePath);
-        MyApplication.getInstance().addToRequestQueue(smr);
-
-    }
 
     private String getPath(Uri contentUri) {
         String[] proj = { MediaStore.Images.Media.DATA };
@@ -649,11 +531,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         return result;
     }
 
-    public void openNewActivity(){
-        Intent intent = new Intent(MainActivity.this, ShowResult.class);
-        intent.putExtra("IMAGE_URI", picUri);
-        startActivity(intent);
-    }
+//    public void openNewActivity(){
+//        Intent intent = new Intent(MainActivity.this, ShowResult.class);
+//        intent.putExtra("IMAGE_URI", picUri);
+//        startActivity(intent);
+//    }
 
 
     /*******************************************************************/
@@ -674,14 +556,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
             public boolean onMenuItemClick(MenuItem item) {
                 Log.i("MENU","bottom bar clicked");
                 switch (item.getItemId()) {
-//                    case R.id.sign_out_menu:
-//                        mFirebaseAuth.signOut();
-//                        Auth.GoogleSignInApi.signOut(mGoogleApiClient);
-//                        mUsername = ANONYMOUS;
-//
-//                        startActivity(new Intent(MainActivity.this, SignInActivity.class));
-//                        finish();
-//                        return true;
                     case R.id.action_map:
                         Intent i = new Intent(getApplicationContext(), Map.class);
                         i.putExtra("User_name", user_name);

@@ -35,7 +35,6 @@
         app:showAsAction="always"
         android:title="@string/notification"
         android:enabled="false"/>
-
     <item
         android:id="@+id/action_map"
         app:showAsAction="always"

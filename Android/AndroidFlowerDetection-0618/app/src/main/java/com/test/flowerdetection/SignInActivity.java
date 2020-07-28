@@ -72,7 +72,6 @@ public class SignInActivity extends AppCompatActivity implements
 //    ProgressDialog loading;
 
     Context mContext;
-    //public static String postUrl = "http://10.0.2.2:5000/user/login";
     public static String postUrl;
     // Firebase instance variables
     private FirebaseAuth mFirebaseAuth;
@@ -97,11 +96,6 @@ public class SignInActivity extends AppCompatActivity implements
 
             }
         });
-        // Assign fields
-      //  mSignInButton = (SignInButton) findViewById(R.id.sign_in_button);
-
-        // Set click listeners
-   //     mSignInButton.setOnClickListener(this);
 
         // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -118,6 +112,7 @@ public class SignInActivity extends AppCompatActivity implements
 
         ButterKnife.bind(this);
         mContext = this;
+
         postUrl = mContext.getString(R.string.posturl) + "/user/login";
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
@@ -147,11 +142,11 @@ public class SignInActivity extends AppCompatActivity implements
 //                break;
 //        }
     }
-
-    private void signIn() {
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-        startActivityForResult(signInIntent, RC_SIGN_IN);
-    }
+//
+//    private void signIn() {
+//        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+//        startActivityForResult(signInIntent, RC_SIGN_IN);
+//    }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
@@ -288,12 +283,6 @@ public class SignInActivity extends AppCompatActivity implements
                                 System.out.println("////I am here");
                                 responseTextLogin.setText(result.get("errmsg").toString());
                             }
-//                            if (loginResponseString.equals("success")) {
-//                                Log.d("LOGIN", "Successful Login");
-//                                finish();//finishing activity and return to the calling activity.
-//                            } else if (loginResponseString.equals("failure")) {
-//                                responseTextLogin.setText("Login Failed. Invalid username or password.");
-//                            }
                         } catch (Exception e) {
                             e.printStackTrace();
                             responseTextLogin.setText("Something went wrong. Please try again later.");

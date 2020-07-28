@@ -28,12 +28,14 @@ import okhttp3.Response;
 public class Forgetpassword extends AppCompatActivity {
     Button btnChangPassword;
     Context mContext;
-    public static String postUrl = "http://10.0.2.2:5000/user/change_password";
-    protected void onCreate(Bundle savedInstanceState) {
+    public static String postUrl ;
 
+    protected void onCreate(Bundle savedInstanceState) {
+        mContext = this;
+        postUrl = mContext.getString(R.string.posturl) + "/user/change_password";
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forgetpassword);
-        mContext = this;
+
         btnChangPassword = findViewById(R.id.btnChangPassword);
         btnChangPassword.setOnClickListener(new View.OnClickListener(){
 
@@ -57,9 +59,6 @@ public class Forgetpassword extends AppCompatActivity {
         } else {
             JSONObject registrationForm = new JSONObject();
             try {
-                // registrationForm.put("subject", "register");
-               // User user = SharedPrefManager.getInstance(mContext).getUser();
-
                 registrationForm.put("current_password", currPass);
                 registrationForm.put("new_password", newPass);
                 registrationForm.put("new_password2",newPass2);
@@ -67,7 +66,6 @@ public class Forgetpassword extends AppCompatActivity {
                 System.out.println(SharedPrefManager.getInstance(getApplicationContext()).isLoggedIn());
                 System.out.println(SharedPrefManager.getInstance(getApplicationContext()).getUser().getEmail());
                 System.out.println(SharedPrefManager.getInstance(getApplicationContext()).getUser().getId());
-                System.out.println("////");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -112,17 +110,9 @@ public class Forgetpassword extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-//                            if (responseString.equals("success")) {
-//                                responseTextRegister.setText("Registration completed successfully.");
-//                                finish();
-//                            } else if (responseString.equals("username")) {
-//                                responseTextRegister.setText("Username already exists. Please chose another username.");
-//                            } else {
-//                                responseTextRegister.setText("Something went wrong. Please try again later.");
-//                            }
                             try {
                                 if(result.get("errno").equals("0")) {
-                                    Log.d("LOGIN", "Successful Login");
+                                    Log.d("Reset Password", "Reset Password Successful");
                                     //  finish();//finishing activity and return to the calling activity.
                                     startActivity(new Intent(mContext, SignInActivity.class));
                                 } else if(!result.get("errno").equals("0")) {
