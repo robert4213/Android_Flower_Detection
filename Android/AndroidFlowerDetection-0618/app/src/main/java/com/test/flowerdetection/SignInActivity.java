@@ -50,7 +50,7 @@ public class SignInActivity extends AppCompatActivity implements
 
     private static final String TAG = "SignInActivity";
     private static final int RC_SIGN_IN = 9001;
-
+    private User user;
     private SignInButton mSignInButton;
     private ProgressBar pbProgress;
     private GoogleApiClient mGoogleApiClient;
@@ -77,6 +77,8 @@ public class SignInActivity extends AppCompatActivity implements
     // Firebase instance variables
     private FirebaseAuth mFirebaseAuth;
     private String user_name;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -218,6 +220,9 @@ public class SignInActivity extends AppCompatActivity implements
             loginForm.put("subject", "login");
             loginForm.put("email", email);
             loginForm.put("password", password);
+            user = new User(email,"");
+
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -269,9 +274,14 @@ public class SignInActivity extends AppCompatActivity implements
                             if(result.get("errno").equals("0")) {
                                 Log.d("LOGIN", "Successful Login");
                               //  finish();//finishing activity and return to the calling activity.
+                                System.out.println(result.get("session_id").toString());
+                                user.setId(result.get("session_id").toString());
+                                SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
                                 Intent intent = new Intent(mContext, MainActivity.class);
                                 intent.putExtra("User_name", user_name);
                                 System.out.println(user_name);
+                                //creating a new user object
+                                SharedPrefManager.getInstance(getApplicationContext()).userLogin(user);
                                 mContext.startActivity(intent);
                                 //startActivity(new Intent(mContext, MainActivity.class));
                             } else if(result.get("errno").equals("4001")) {

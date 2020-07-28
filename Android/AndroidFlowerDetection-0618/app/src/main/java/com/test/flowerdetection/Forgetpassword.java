@@ -58,10 +58,16 @@ public class Forgetpassword extends AppCompatActivity {
             JSONObject registrationForm = new JSONObject();
             try {
                 // registrationForm.put("subject", "register");
+               // User user = SharedPrefManager.getInstance(mContext).getUser();
 
                 registrationForm.put("current_password", currPass);
                 registrationForm.put("new_password", newPass);
                 registrationForm.put("new_password2",newPass2);
+                registrationForm.put("session_id",SharedPrefManager.getInstance(mContext).getUser().getId());
+                System.out.println(SharedPrefManager.getInstance(getApplicationContext()).isLoggedIn());
+                System.out.println(SharedPrefManager.getInstance(getApplicationContext()).getUser().getEmail());
+                System.out.println(SharedPrefManager.getInstance(getApplicationContext()).getUser().getId());
+                System.out.println("////");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -103,8 +109,6 @@ public class Forgetpassword extends AppCompatActivity {
                 try {
                     final String responseString = response.body().string().trim();
                     JSONObject result = new JSONObject(responseString);
-
-
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -124,7 +128,7 @@ public class Forgetpassword extends AppCompatActivity {
                                 } else if(!result.get("errno").equals("0")) {
                                     System.out.println(result.toString());
                                     TextView responseText = findViewById(R.id.responseTextRegister);
-                                    responseText.setText(result.get("errmsg").toString());
+                                     responseText.setText(result.get("errmsg").toString());
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
