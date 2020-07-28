@@ -103,5 +103,4 @@ public class ImageUploadTask extends AsyncTask<String, Integer, String> {
         ((Activity)(mContext)).finish();
     }
 
-
 }

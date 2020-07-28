@@ -4,6 +4,11 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,7 +26,9 @@ import org.opencv.android.CameraBridgeViewBase.CvCameraViewFrame;
 import org.opencv.android.CameraBridgeViewBase.CvCameraViewListener2;
 import org.opencv.android.JavaCameraView;
 import org.opencv.android.OpenCVLoader;
+import org.opencv.android.Utils;
 import org.opencv.core.Core;
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.*;
 import org.opencv.core.Point;
@@ -31,9 +38,13 @@ import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -49,6 +60,10 @@ public class Opencv_camera extends AppCompatActivity implements CameraBridgeView
     int counter = 0;
     int[] baseline = new int[1];
     String rect;
+    Mat mat;
+    Size reshape;
+    int frame_height;
+    int frame_width;
 
 
     @Override
@@ -60,6 +75,11 @@ public class Opencv_camera extends AppCompatActivity implements CameraBridgeView
         cameraBridgeViewBase = (JavaCameraView)findViewById(R.id.CameraView);
         cameraBridgeViewBase.setVisibility(SurfaceView.VISIBLE);
         cameraBridgeViewBase.setCvCameraViewListener(this);
+
+        double width = cameraBridgeViewBase.getWidth();
+        double height = cameraBridgeViewBase.getHeight();
+        reshape = new Size(width, height);
+        System.out.println("Preview Size: " + width + "/" + height);
 
 
         //System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
@@ -83,52 +103,71 @@ public class Opencv_camera extends AppCompatActivity implements CameraBridgeView
 
         };
 
-
-
-
     }
 
     @Override
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
 
-
-        Mat frame = inputFrame.rgba();
-
-        //String rect = "{\"object\": [{\"type\": \"lily\", \"box\": {\"top\": 100, \"left\": 250, \"bottom\": 320, \"right\": 500}, \"score\": \"0.97702414\", \"link\": \"https://en.wikipedia.org/wiki/Lilium\"}, {\"type\": \"rose\", \"box\": {\"top\": 50, \"left\": 130, \"bottom\": 280, \"right\": 300}, \"score\": \"0.97702414\", \"link\": \"https://en.wikipedia.org/wiki/Rose\"}]}";
+        Mat mRgba = inputFrame.rgba();
+        Mat mRgbaT = mRgba.t();
 
         if(counter % 5 == 0) {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmssSSS");
-            String date = simpleDateFormat.format(new Date());
-            String filename = date + ".png";
-            //String folder = Environment.getExternalStorageDirectory().getPath() + "/video";
 
-            File mediaStorageDir = new File(
-                    Environment
-                            .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-                    Config.IMAGE_DIRECTORY_NAME);
-            String folder = mediaStorageDir.getPath();
-            String filePath = "/data/user/0/com.test.flowerdetection/files/fd" + "/" + filename;
-            System.out.println("Video file path: " + filePath);
-            Imgcodecs.imwrite(filePath, frame);
-            File f = new File(filePath);
-            VideoFrameUploadTask videoFrameUploadTask = new VideoFrameUploadTask(f, frame);
-            videoFrameUploadTask.execute();
+//            //Original save file
+//            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+//            String date = simpleDateFormat.format(new Date());
+//            String filename = "VIDEO_" + date + ".png";
+//
+//            File mediaStorageDir = new File(
+//                    Environment
+//                            .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+//                    Config.IMAGE_DIRECTORY_NAME);
+//            String folder = mediaStorageDir.getPath();
+//            String filePath = "/data/user/0/com.test.flowerdetection/files/fd" + "/" + filename;
+//            System.out.println("Video file path: " + filePath);
+//            Imgcodecs.imwrite(filePath, mRgbaT);
+//            File f = new File(filePath);
+//            VideoFrameUploadTask videoFrameUploadTask = new VideoFrameUploadTask(f, mRgbaT, filePath);
+//            videoFrameUploadTask.execute();
+
+            //New save file try
+            String filePath = "";
+            try {
+                filePath = createImageFile();
+                System.out.println("Video Frame file path: " + filePath);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if(filePath != "") {
+                Imgcodecs.imwrite(filePath, mRgbaT);
+                File f = new File(filePath);
+                VideoFrameUploadTask videoFrameUploadTask = new VideoFrameUploadTask(f, mRgbaT, filePath);
+                videoFrameUploadTask.execute();
+            }
         }
 
         try {
             if(rect != null) {
-                drawbox(frame, rect);
+                Mat bmp_rect = drawBitmap(rect);
+//                System.out.println("Image size: col: " + mRgba.cols() + ", row: " + mRgba.rows());
+//                System.out.println("bmp_rect size: col: " + bmp_rect.cols() + ", row: " + bmp_rect.rows());
+                Core.addWeighted(mRgba, 1, bmp_rect, 1, 1, mRgba);
             }
         } catch (JSONException E) {
             E.printStackTrace();
         }
+
+
         counter = counter + 1;
-        return frame;
+
+        return mRgba;
     }
 
 
     @Override
     public void onCameraViewStarted(int width, int height) {
+        frame_height = height;
+        frame_width = width;
 
     }
 
@@ -209,6 +248,51 @@ public class Opencv_camera extends AppCompatActivity implements CameraBridgeView
         }
     }
 
+    private Mat drawBitmap(String rect) throws JSONException {
+
+
+        Bitmap bmp = Bitmap.createBitmap(frame_width, frame_height, Bitmap.Config.ARGB_8888);
+
+        BitmapDrawable bd = new BitmapDrawable(bmp);
+        bd.setAlpha(50);
+        Bitmap bitmap = bd.getBitmap();
+
+        Canvas canvas = new Canvas(bitmap);
+        Paint paint = new Paint();
+
+        JSONObject response = new JSONObject(rect);
+        JSONArray arr = response.getJSONArray("object");
+        for(int i = 0; i < arr.length(); i++) {
+            JSONObject jsonobject = arr.getJSONObject(i);
+            String category = jsonobject.getString("type");
+            JSONObject box = jsonobject.getJSONObject("box");
+            int top0 = box.getInt("top");
+            int left0 = box.getInt("left");
+            int bottom0 = box.getInt("bottom");
+            int right0 = box.getInt("right");
+
+            int top = frame_height - right0;
+            int left = top0;
+            int bottom = frame_height - left0;
+            int right = bottom0;
+            paint.setColor(Color.RED);
+            paint.setStyle(Paint.Style.STROKE);
+            paint.setStrokeWidth(2);
+            canvas.drawRect(left, top, right, bottom, paint);
+            canvas.save();
+            canvas.rotate(270, left, frame_height - left0);
+            paint.setTextSize(20);
+            canvas.drawText(category, left, frame_height - left0, paint);
+            canvas.restore();
+        }
+
+        Mat mat = new Mat();
+
+        Bitmap bmp32 = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+        Utils.bitmapToMat(bmp32, mat);
+        return mat;
+    }
+
     private class VideoFrameUploadTask extends AsyncTask<String, Integer, String> {
 
         String IMGUR_CLIENT_ID = "123";
@@ -220,10 +304,12 @@ public class Opencv_camera extends AppCompatActivity implements CameraBridgeView
 
         private File f;
         private Mat frame;
+        private String filepath;
 
-        public VideoFrameUploadTask(File f, Mat frame) {
+        public VideoFrameUploadTask(File f, Mat frame, String filepath) {
             this.f = f;
             this.frame = frame;
+            this.filepath = filepath;
         }
 
         @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -263,8 +349,45 @@ public class Opencv_camera extends AppCompatActivity implements CameraBridgeView
         @Override
         protected void onPostExecute(String s) {
             rect = s;
+
+            if (f.exists()) {
+                String deleteCmd = "rm -r " + filepath;
+                System.out.println("Delete cmd: " + deleteCmd);
+                Runtime runtime = Runtime.getRuntime();
+                try {
+                    runtime.exec(deleteCmd);
+                } catch (IOException e) {
+
+                }
+            }
+
         }
 
     }
+
+    public static Mat rotate(Mat src, double angle)
+    {
+        Mat dst = new Mat();
+        if(angle == 180 || angle == -180) {
+            Core.flip(src, dst, -1);
+        } else if(angle == 90 || angle == -270) {
+            Core.flip(src.t(), dst, 1);
+        } else if(angle == 270 || angle == -90) {
+            Core.flip(src.t(), dst, 0);
+        }
+
+        return dst;
+    }
+
+    private String createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date());
+        String mFileName = "VIDEO_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File mFile = File.createTempFile(mFileName, ".png", storageDir);
+        return mFile.getPath();
+    }
+
+
 
 }

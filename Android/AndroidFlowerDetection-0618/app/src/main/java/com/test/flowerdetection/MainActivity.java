@@ -9,6 +9,8 @@ import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -93,7 +95,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 
     //RelativeLayout r;
     CoordinatorLayout r;
-
 
     // public static String BASE_URL = "http://192.168.1.144:8888/upload.php";
 //    private static final String IMGUR_CLIENT_ID = "123";
@@ -383,6 +384,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         File mFile = File.createTempFile(mFileName, ".jpg", storageDir);
         return mFile;
     }
+
+
     /**
      * Get real file path from URI
      */

@@ -38,10 +38,11 @@
                 android:id="@+id/category"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="5dp"
                 android:gravity="center"
                 android:text="Unknown"
-                android:layout_margin="5dp"
-                android:textSize="16sp" />
+                android:textColor="@color/colorAccent"
+                android:textSize="20sp" />
 
             <GridView
                 android:id="@+id/res_grid"

@@ -21,17 +21,21 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="80dp"
         android:gravity="center"
-        android:text="TextView" />
+        android:text="TextView"
+        android:textColor="#E91E63"
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/img_loc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_below="@+id/img_date"
+        android:layout_alignParentTop="true"
         android:layout_marginTop="60dp"
         android:gravity="center"
-        android:text="TextView" />
+        android:text="TextView"
+        android:textColor="#E91E63"
+        android:textSize="18sp" />
 
     <ImageView
         android:id="@+id/img_detail"
@@ -49,10 +53,13 @@
         android:layout_below="@+id/img_detail"
         android:layout_marginTop="10dp"
         android:gravity="center"
-        android:text="TextView" />
+        android:text="TextView"
+        android:textColor="#E91E63"
+        android:textSize="18sp" />
 
     <ScrollView
         android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
         android:layout_below="@+id/img_label"
         android:layout_height="match_parent">
 

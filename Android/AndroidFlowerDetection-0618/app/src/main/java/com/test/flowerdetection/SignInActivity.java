@@ -72,8 +72,8 @@ public class SignInActivity extends AppCompatActivity implements
 //    ProgressDialog loading;
 
     Context mContext;
-    public static String postUrl = "http://10.0.2.2:5000/user/login";
-    //public static String postUrl;
+    //public static String postUrl = "http://10.0.2.2:5000/user/login";
+    public static String postUrl;
     // Firebase instance variables
     private FirebaseAuth mFirebaseAuth;
     private String user_name;
@@ -116,7 +116,7 @@ public class SignInActivity extends AppCompatActivity implements
 
         ButterKnife.bind(this);
         mContext = this;
-       // postUrl = mContext.getString(R.string.posturl) + "/user/login";
+        postUrl = mContext.getString(R.string.posturl) + "/user/login";
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override

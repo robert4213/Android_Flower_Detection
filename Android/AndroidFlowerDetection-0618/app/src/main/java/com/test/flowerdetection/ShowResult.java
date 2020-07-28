@@ -12,6 +12,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
@@ -19,6 +20,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -57,6 +59,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -98,7 +101,6 @@ public class ShowResult extends AppCompatActivity {
     private String join_boxes;
     private String join_categories;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,17 +120,21 @@ public class ShowResult extends AppCompatActivity {
 
         System.out.println("box2 " + box);
 
-        bitmap = null;
-        try {
-            bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), picUri);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        bitmap = null;
+//        try {
+//            bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), picUri);
+ //       } catch (IOException e) {
+ //           e.printStackTrace();
+ //       }
         imageView = (ImageView) findViewById(R.id.res_img);
         show_category = (TextView) findViewById(R.id.category);
 
         gridView = (GridView) findViewById(R.id.res_grid);
 
+        File imgFile = new File(file_path);
+        Bitmap orig_bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+
+        bitmap = rotateImage(orig_bitmap, imgFile.getAbsolutePath());
         imageView.setImageBitmap(bitmap);
 
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -158,7 +164,7 @@ public class ShowResult extends AppCompatActivity {
 
             System.out.println("Dialog pop up");
             AlertDialog.Builder builder = new AlertDialog.Builder(ShowResult.this);
-            builder.setTitle("Error!")
+            builder.setTitle("Note:")
                     .setMessage("No Follower Detected. Please Try Another Image.")
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
@@ -315,7 +321,8 @@ public class ShowResult extends AppCompatActivity {
                     latitude = currentLocation.getLatitude();
                     longitude = currentLocation.getLongitude();
                     city = getCity(latitude,longitude);
-                    Bitmap bmp = Bitmap.createScaledBitmap(bitmap, 128, 128, false);
+                    Bitmap rectBitmap = rectbitmap(bitmap);
+                    Bitmap bmp = Bitmap.createScaledBitmap(rectBitmap, 128, 128, false);
                     System.out.println("Location upload: " + latitude + " , " + longitude + " " + city);
                     db.addEntry(user_name, all_category, file_path, file_key, join_boxes, join_categories, bmp, latitude, longitude, city);
                 }
@@ -366,11 +373,62 @@ public class ShowResult extends AppCompatActivity {
         return cutBitmap;
     }
 
+    private Bitmap rectbitmap(Bitmap bitmap) {
+        Bitmap origialBitmap = bitmap;
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+
+        Bitmap cutBitmap = null;
+
+        if(width < height) {
+            cutBitmap = Bitmap.createBitmap(width, width, Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(cutBitmap);
+            Rect desRect = new Rect(0, 0, width, width);
+            Rect srcRect = new Rect(0, height/2 - width/2, width, height/2 + width/2);
+            canvas.drawBitmap(origialBitmap, srcRect, desRect, null );
+        } else {
+            cutBitmap = Bitmap.createBitmap(height, height, Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(cutBitmap);
+            Rect desRect = new Rect(0, 0, height, height);
+            Rect srcRect = new Rect(width/2 - height/2, 0, height, height/2 + width/2);
+            canvas.drawBitmap(origialBitmap, srcRect, desRect, null );
+        }
+        return cutBitmap;
+    }
+
     public boolean checkfilekey(String file_key) {
         SQLiteDatabase DB = db.getWritableDatabase();
         String sql = "SELECT * FROM user_img WHERE user_name='" + user_name + "' " + "AND file_key='" + file_key + "'";
         Cursor cursor = DB.rawQuery(sql, null);
         return cursor.getCount() == 0 ? false : true;
+    }
+
+    private Bitmap rotateImage(Bitmap bitmap, String ImageLocation) {
+        ExifInterface exifInterface = null;
+        try {
+            exifInterface = new ExifInterface(ImageLocation);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
+        System.out.println("Orientation: " + orientation);
+        Matrix matrix = new Matrix();
+        Bitmap rotatedBitmap = null;
+        switch (orientation) {
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                System.out.println("Orientation is 90");
+                matrix.postRotate(90);
+                rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                matrix.setRotate(180);
+                rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+                break;
+            default:
+                rotatedBitmap = bitmap;
+        }
+
+        return rotatedBitmap;
     }
 
 }

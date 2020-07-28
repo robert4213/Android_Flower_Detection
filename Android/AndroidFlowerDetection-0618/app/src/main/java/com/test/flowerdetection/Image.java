@@ -1,10 +1,13 @@
 package com.test.flowerdetection;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 //import android.media.Image;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -45,6 +48,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -71,7 +76,7 @@ public class Image extends AppCompatActivity implements GoogleApiClient.OnConnec
     private static String BASE_URL = "http://192.168.1.144:5000/upload";
     static final int PICK_IMAGE_REQUEST = 1;
     static final int CAMERA_REQUEST = 1888;
-    private String filePath;
+    public static String filePath;
     private File f;
     private Uri picUri;
     private ImageUploadTask imageUploadTask;
@@ -105,6 +110,8 @@ public class Image extends AppCompatActivity implements GoogleApiClient.OnConnec
     Uri bitmap;
     FileCompressor mCompressor;
     FileUtils fu;
+    //String filePath = null;
+    @SuppressLint("WrongThread")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -158,6 +165,48 @@ public class Image extends AppCompatActivity implements GoogleApiClient.OnConnec
 
      //   btnChoose = (Button) findViewById(R.id.button_choose);
         btnUpload = (Button) findViewById(R.id.button_upload);
+
+
+        if(bitmap != null) {
+            filePath = fu.getPath(bitmap);
+            System.out.println("Image file path is: " + filePath);
+            // mPhotoFile = mCompressor.compressToFile(new File(getRealPathFromUri(selectedImage)));
+            if (filePath.contains("JPEG_")) {
+                Bitmap rotate_bmp = null;
+
+                Bitmap bmp = null;
+                try {
+                    bmp = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), bitmap);
+                    System.out.println("Original bmp size: width " + bmp.getWidth() + ", height " + bmp.getHeight());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                if (bmp != null) {
+                    rotate_bmp = rotateImage(bmp, filePath);
+                }
+
+                File dest = null;
+
+                try {
+                    dest = createImageFile();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                if (dest != null) {
+                    try {
+                        FileOutputStream out = new FileOutputStream(dest);
+                        rotate_bmp.compress(Bitmap.CompressFormat.PNG, 90, out);
+                        out.flush();
+                        out.close();
+                        filePath = dest.getPath();
+                        System.out.println("Image file path after rotate is: " + filePath);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
       //  bClick = (Button)findViewById(R.id.Bclick);
 
         //For camera
@@ -178,29 +227,65 @@ public class Image extends AppCompatActivity implements GoogleApiClient.OnConnec
 //                imageBrowse();
 //            }
 //        });
+
+
         btnUpload = findViewById(R.id.button_upload);
         btnUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                if (bitmap != null) {
-//                    imageUpload(filePath);
+                pgsBar.setVisibility(view.VISIBLE);
 
-                    String filePath = fu.getPath(bitmap);
-                    System.out.println("Image file path is: " + filePath);
-                   // mPhotoFile = mCompressor.compressToFile(new File(getRealPathFromUri(selectedImage)));
-                    f = new File(filePath);
-//                    try {
-//                        f = mCompressor.compressToFile(new File(getRealPathFromUri(bitmap)));
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
+                if (bitmap != null) {
+////                    imageUpload(filePath);
+//
+//                    String filePath = fu.getPath(bitmap);
+//                    System.out.println("Image file path is: " + filePath);
+//                   // mPhotoFile = mCompressor.compressToFile(new File(getRealPathFromUri(selectedImage)));
+//                    if(filePath.contains("JPEG_")) {
+//                        Bitmap rotate_bmp = null;
+//
+//                        Bitmap bmp = null;
+//                        try {
+//                            bmp = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), bitmap);
+//                            System.out.println("Original bmp size: width " + bmp.getWidth() + ", height " + bmp.getHeight());
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+//                        if(bmp != null) {
+//                            rotate_bmp = rotateImage(bmp, filePath);
+//                        }
+//
+//                        File dest = null;
+//
+//                        try {
+//                            dest = createImageFile();
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+//
+//                        if (dest != null) {
+//                            try {
+//                                FileOutputStream out = new FileOutputStream(dest);
+//                                rotate_bmp.compress(Bitmap.CompressFormat.PNG, 90, out);
+//                                out.flush();
+//                                out.close();
+//                                filePath = dest.getPath();
+//                                System.out.println("Image file path after rotate is: " + filePath );
+//                            } catch (Exception e) {
+//                                e.printStackTrace();
+//                            }
+//                        }
 //                    }
+
+                    f = new File(filePath);
+
                     try {
 
                         //上传图片
                         //Toast.makeText(Image.this,"Begin uploading"+f.getAbsolutePath(),Toast.LENGTH_LONG).show();
                         imageUploadTask = new ImageUploadTask(Image.this, f, bitmap, filePath);
-                        pgsBar.setVisibility(view.VISIBLE);
+                        //pgsBar.setVisibility(view.VISIBLE);
                         imageUploadTask.execute();
 
 
@@ -213,6 +298,43 @@ public class Image extends AppCompatActivity implements GoogleApiClient.OnConnec
                 //openNewActivity();
             }
         });
+    }
+
+    private Bitmap rotateImage(Bitmap bitmap, String ImageLocation) {
+        ExifInterface exifInterface = null;
+        try {
+            exifInterface = new ExifInterface(ImageLocation);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
+        System.out.println("Orientation: " + orientation);
+        Matrix matrix = new Matrix();
+        Bitmap rotatedBitmap = null;
+        switch (orientation) {
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                System.out.println("Orientation is 90");
+                matrix.postRotate(90);
+                rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                matrix.setRotate(180);
+                rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+                break;
+            default:
+                rotatedBitmap = bitmap;
+        }
+
+        return rotatedBitmap;
+    }
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+        String mFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File mFile = File.createTempFile(mFileName, ".jpg", storageDir);
+        return mFile;
     }
 
 

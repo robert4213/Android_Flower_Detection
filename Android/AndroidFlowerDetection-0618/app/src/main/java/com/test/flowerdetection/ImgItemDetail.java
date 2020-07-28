@@ -8,7 +8,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Rect;
+import android.media.ExifInterface;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,6 +22,7 @@ import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import static com.test.flowerdetection.MainActivity.db;
@@ -77,7 +80,9 @@ public class ImgItemDetail extends AppCompatActivity {
 
             Bitmap bmp = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
 
-            imageView.setImageBitmap(bmp);
+            Bitmap rotated_bmp = rotateImage(bmp, imgFile.getAbsolutePath());
+
+            imageView.setImageBitmap(rotated_bmp);
 
             SubImagesList = new ArrayList<>();
             Categories = new ArrayList<>();
@@ -95,7 +100,7 @@ public class ImgItemDetail extends AppCompatActivity {
                     rect[i] = Integer.parseInt(point[i]);
 
                 }
-                Bitmap bitmap = cutbitmap(rect, bmp);
+                Bitmap bitmap = cutbitmap(rect, rotated_bmp);
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.PNG, 0, stream);
                 byte[] image = stream.toByteArray();
@@ -158,5 +163,33 @@ public class ImgItemDetail extends AppCompatActivity {
                 rect[2]);
         canvas.drawBitmap(origialBitmap, srcRect, desRect, null);
         return cutBitmap;
+    }
+
+    private Bitmap rotateImage(Bitmap bitmap, String ImageLocation) {
+        ExifInterface exifInterface = null;
+        try {
+            exifInterface = new ExifInterface(ImageLocation);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
+        System.out.println("Orientation: " + orientation);
+        Matrix matrix = new Matrix();
+        Bitmap rotatedBitmap = null;
+        switch (orientation) {
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                System.out.println("Orientation is 90");
+                matrix.postRotate(90);
+                rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                matrix.setRotate(180);
+                rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+                break;
+            default:
+                rotatedBitmap = bitmap;
+        }
+
+        return rotatedBitmap;
     }
 }
