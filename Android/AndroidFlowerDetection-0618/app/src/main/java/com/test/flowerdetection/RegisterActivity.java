@@ -39,6 +39,7 @@ public class RegisterActivity extends AppCompatActivity {
     Context mContext;
     //public static String postUrl = "http://10.0.2.2:5000/user/register";
     public static String postUrl;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
@@ -48,11 +49,11 @@ public class RegisterActivity extends AppCompatActivity {
         mContext = this;
         postUrl = mContext.getString(R.string.posturl) + "/user/register";
         //mApiService = UtilsApi.getAPIService();
-
+        postUrl = mContext.getString(R.string.posturl) + "/user/register";
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // loading = ProgressDialog.show(mContext, null, "Harap Tunggu...", true, false);
+                 loading = ProgressDialog.show(mContext, null, "Please wait...", true, false);
                 requestRegister(v);
             }
         });
@@ -76,8 +77,6 @@ public class RegisterActivity extends AppCompatActivity {
         } else {
             JSONObject registrationForm = new JSONObject();
             try {
-               // registrationForm.put("subject", "register");
-
                 registrationForm.put("email", email);
                 registrationForm.put("mobile", mobile);
                 registrationForm.put("username",name);
@@ -129,21 +128,12 @@ public class RegisterActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-//                            if (responseString.equals("success")) {
-//                                responseTextRegister.setText("Registration completed successfully.");
-//                                finish();
-//                            } else if (responseString.equals("username")) {
-//                                responseTextRegister.setText("Username already exists. Please chose another username.");
-//                            } else {
-//                                responseTextRegister.setText("Something went wrong. Please try again later.");
-//                            }
                             try {
                                 if(result.get("errno").equals("0")) {
-                                    Log.d("LOGIN", "Successful Login");
+                                    Log.d("Register", "Register Login");
                                     //  finish();//finishing activity and return to the calling activity.
                                     startActivity(new Intent(mContext, SignInActivity.class));
                                 } else if(!result.get("errno").equals("0")) {
-                                    System.out.println("////I am here");
                                     TextView responseText = findViewById(R.id.responseTextRegister);
                                     responseText.setText(result.get("errmsg").toString());
                                 }

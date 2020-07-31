@@ -1,5 +1,6 @@
 -- Merging decision tree log ---
 manifest
+<<<<<<< HEAD
 ADDED from D:\projects\git\3\Android_Flower_Detection\Android\AndroidFlowerDetection-0618\openCVLibrary3410\src\main\AndroidManifest.xml:2:1-7:12
 INJECTED from D:\projects\git\3\Android_Flower_Detection\Android\AndroidFlowerDetection-0618\openCVLibrary3410\src\main\AndroidManifest.xml:2:1-7:12
 INJECTED from D:\projects\git\3\Android_Flower_Detection\Android\AndroidFlowerDetection-0618\openCVLibrary3410\src\main\AndroidManifest.xml:2:1-7:12
@@ -7,31 +8,46 @@ INJECTED from D:\projects\git\3\Android_Flower_Detection\Android\AndroidFlowerDe
 INJECTED from D:\projects\git\3\Android_Flower_Detection\Android\AndroidFlowerDetection-0618\openCVLibrary3410\src\main\AndroidManifest.xml:2:1-7:12
 INJECTED from D:\projects\git\3\Android_Flower_Detection\Android\AndroidFlowerDetection-0618\openCVLibrary3410\src\main\AndroidManifest.xml:2:1-7:12
 INJECTED from D:\projects\git\3\Android_Flower_Detection\Android\AndroidFlowerDetection-0618\openCVLibrary3410\src\main\AndroidManifest.xml:2:1-7:12
+=======
+ADDED from /Users/jennychen/workspace/Android_Flower_Detection/Android/AndroidFlowerDetection-0618/openCVLibrary3410/src/main/AndroidManifest.xml:2:1-7:12
+INJECTED from /Users/jennychen/workspace/Android_Flower_Detection/Android/AndroidFlowerDetection-0618/openCVLibrary3410/src/main/AndroidManifest.xml:2:1-7:12
+INJECTED from /Users/jennychen/workspace/Android_Flower_Detection/Android/AndroidFlowerDetection-0618/openCVLibrary3410/src/main/AndroidManifest.xml:2:1-7:12
+INJECTED from /Users/jennychen/workspace/Android_Flower_Detection/Android/AndroidFlowerDetection-0618/openCVLibrary3410/src/main/AndroidManifest.xml:2:1-7:12
+INJECTED from /Users/jennychen/workspace/Android_Flower_Detection/Android/AndroidFlowerDetection-0618/openCVLibrary3410/src/main/AndroidManifest.xml:2:1-7:12
+INJECTED from /Users/jennychen/workspace/Android_Flower_Detection/Android/AndroidFlowerDetection-0618/openCVLibrary3410/src/main/AndroidManifest.xml:2:1-7:12
+INJECTED from /Users/jennychen/workspace/Android_Flower_Detection/Android/AndroidFlowerDetection-0618/openCVLibrary3410/src/main/AndroidManifest.xml:2:1-7:12
+>>>>>>> 9b1bacbd72db1348c3d8c77eb601c355aaeb501d
 	package
-		ADDED from D:\projects\git\3\Android_Flower_Detection\Android\AndroidFlowerDetection-0618\openCVLibrary3410\src\main\AndroidManifest.xml:3:7-27
-		INJECTED from D:\projects\git\3\Android_Flower_Detection\Android\AndroidFlowerDetection-0618\openCVLibrary3410\src\main\AndroidManifest.xml
-		INJECTED from D:\projects\git\3\Android_Flower_Detection\Android\AndroidFlowerDetection-0618\openCVLibrary3410\src\main\AndroidManifest.xml
+		ADDED from /Users/jennychen/workspace/Android_Flower_Detection/Android/AndroidFlowerDetection-0618/openCVLibrary3410/src/main/AndroidManifest.xml:3:7-27
+		INJECTED from /Users/jennychen/workspace/Android_Flower_Detection/Android/AndroidFlowerDetection-0618/openCVLibrary3410/src/main/AndroidManifest.xml
+		INJECTED from /Users/jennychen/workspace/Android_Flower_Detection/Android/AndroidFlowerDetection-0618/openCVLibrary3410/src/main/AndroidManifest.xml
 	android:versionName
-		ADDED from D:\projects\git\3\Android_Flower_Detection\Android\AndroidFlowerDetection-0618\openCVLibrary3410\src\main\AndroidManifest.xml:5:7-35
-		INJECTED from D:\projects\git\3\Android_Flower_Detection\Android\AndroidFlowerDetection-0618\openCVLibrary3410\src\main\AndroidManifest.xml
-		INJECTED from D:\projects\git\3\Android_Flower_Detection\Android\AndroidFlowerDetection-0618\openCVLibrary3410\src\main\AndroidManifest.xml
+		ADDED from /Users/jennychen/workspace/Android_Flower_Detection/Android/AndroidFlowerDetection-0618/openCVLibrary3410/src/main/AndroidManifest.xml:5:7-35
+		INJECTED from /Users/jennychen/workspace/Android_Flower_Detection/Android/AndroidFlowerDetection-0618/openCVLibrary3410/src/main/AndroidManifest.xml
+		INJECTED from /Users/jennychen/workspace/Android_Flower_Detection/Android/AndroidFlowerDetection-0618/openCVLibrary3410/src/main/AndroidManifest.xml
 	xmlns:android
-		ADDED from D:\projects\git\3\Android_Flower_Detection\Android\AndroidFlowerDetection-0618\openCVLibrary3410\src\main\AndroidManifest.xml:2:11-69
+		ADDED from /Users/jennychen/workspace/Android_Flower_Detection/Android/AndroidFlowerDetection-0618/openCVLibrary3410/src/main/AndroidManifest.xml:2:11-69
 	android:versionCode
-		ADDED from D:\projects\git\3\Android_Flower_Detection\Android\AndroidFlowerDetection-0618\openCVLibrary3410\src\main\AndroidManifest.xml:4:7-34
-		INJECTED from D:\projects\git\3\Android_Flower_Detection\Android\AndroidFlowerDetection-0618\openCVLibrary3410\src\main\AndroidManifest.xml
-		INJECTED from D:\projects\git\3\Android_Flower_Detection\Android\AndroidFlowerDetection-0618\openCVLibrary3410\src\main\AndroidManifest.xml
+		ADDED from /Users/jennychen/workspace/Android_Flower_Detection/Android/AndroidFlowerDetection-0618/openCVLibrary3410/src/main/AndroidManifest.xml:4:7-34
+		INJECTED from /Users/jennychen/workspace/Android_Flower_Detection/Android/AndroidFlowerDetection-0618/openCVLibrary3410/src/main/AndroidManifest.xml
+		INJECTED from /Users/jennychen/workspace/Android_Flower_Detection/Android/AndroidFlowerDetection-0618/openCVLibrary3410/src/main/AndroidManifest.xml
 uses-sdk
-INJECTED from D:\projects\git\3\Android_Flower_Detection\Android\AndroidFlowerDetection-0618\openCVLibrary3410\src\main\AndroidManifest.xml reason: use-sdk injection requested
-INJECTED from D:\projects\git\3\Android_Flower_Detection\Android\AndroidFlowerDetection-0618\openCVLibrary3410\src\main\AndroidManifest.xml
-INJECTED from D:\projects\git\3\Android_Flower_Detection\Android\AndroidFlowerDetection-0618\openCVLibrary3410\src\main\AndroidManifest.xml
-INJECTED from D:\projects\git\3\Android_Flower_Detection\Android\AndroidFlowerDetection-0618\openCVLibrary3410\src\main\AndroidManifest.xml
-INJECTED from D:\projects\git\3\Android_Flower_Detection\Android\AndroidFlowerDetection-0618\openCVLibrary3410\src\main\AndroidManifest.xml
+INJECTED from /Users/jennychen/workspace/Android_Flower_Detection/Android/AndroidFlowerDetection-0618/openCVLibrary3410/src/main/AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from /Users/jennychen/workspace/Android_Flower_Detection/Android/AndroidFlowerDetection-0618/openCVLibrary3410/src/main/AndroidManifest.xml
+INJECTED from /Users/jennychen/workspace/Android_Flower_Detection/Android/AndroidFlowerDetection-0618/openCVLibrary3410/src/main/AndroidManifest.xml
+INJECTED from /Users/jennychen/workspace/Android_Flower_Detection/Android/AndroidFlowerDetection-0618/openCVLibrary3410/src/main/AndroidManifest.xml
+INJECTED from /Users/jennychen/workspace/Android_Flower_Detection/Android/AndroidFlowerDetection-0618/openCVLibrary3410/src/main/AndroidManifest.xml
 	android:targetSdkVersion
-		INJECTED from D:\projects\git\3\Android_Flower_Detection\Android\AndroidFlowerDetection-0618\openCVLibrary3410\src\main\AndroidManifest.xml
-		ADDED from D:\projects\git\3\Android_Flower_Detection\Android\AndroidFlowerDetection-0618\openCVLibrary3410\src\main\AndroidManifest.xml
-		INJECTED from D:\projects\git\3\Android_Flower_Detection\Android\AndroidFlowerDetection-0618\openCVLibrary3410\src\main\AndroidManifest.xml
+		INJECTED from /Users/jennychen/workspace/Android_Flower_Detection/Android/AndroidFlowerDetection-0618/openCVLibrary3410/src/main/AndroidManifest.xml
+		ADDED from /Users/jennychen/workspace/Android_Flower_Detection/Android/AndroidFlowerDetection-0618/openCVLibrary3410/src/main/AndroidManifest.xml
+		INJECTED from /Users/jennychen/workspace/Android_Flower_Detection/Android/AndroidFlowerDetection-0618/openCVLibrary3410/src/main/AndroidManifest.xml
 	android:minSdkVersion
+<<<<<<< HEAD
 		INJECTED from D:\projects\git\3\Android_Flower_Detection\Android\AndroidFlowerDetection-0618\openCVLibrary3410\src\main\AndroidManifest.xml
 		ADDED from D:\projects\git\3\Android_Flower_Detection\Android\AndroidFlowerDetection-0618\openCVLibrary3410\src\main\AndroidManifest.xml
 		INJECTED from D:\projects\git\3\Android_Flower_Detection\Android\AndroidFlowerDetection-0618\openCVLibrary3410\src\main\AndroidManifest.xml
+=======
+		INJECTED from /Users/jennychen/workspace/Android_Flower_Detection/Android/AndroidFlowerDetection-0618/openCVLibrary3410/src/main/AndroidManifest.xml
+		ADDED from /Users/jennychen/workspace/Android_Flower_Detection/Android/AndroidFlowerDetection-0618/openCVLibrary3410/src/main/AndroidManifest.xml
+		INJECTED from /Users/jennychen/workspace/Android_Flower_Detection/Android/AndroidFlowerDetection-0618/openCVLibrary3410/src/main/AndroidManifest.xml
+>>>>>>> 9b1bacbd72db1348c3d8c77eb601c355aaeb501d

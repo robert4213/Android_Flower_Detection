@@ -70,9 +70,6 @@ public class Image extends AppCompatActivity implements GoogleApiClient.OnConnec
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final int MEDIA_TYPE_VIDEO = 2;
 
-    // public static String BASE_URL = "http://192.168.1.144:8888/upload.php";
-//    private static final String IMGUR_CLIENT_ID = "123";
-//    private static final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
     private static String BASE_URL = "http://192.168.1.144:5000/upload";
     static final int PICK_IMAGE_REQUEST = 1;
     static final int CAMERA_REQUEST = 1888;
@@ -129,38 +126,9 @@ public class Image extends AppCompatActivity implements GoogleApiClient.OnConnec
                         .placeholder(R.drawable.ic_launcher_background))
                 .into(imageView);
         setUpBottomAppBar();
-//        ButterKnife.bind(this);
-     //   mCompressor = new FileCompressor(this);
-        //click event over FAB
-//        findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                // Toast.makeText(MainActivity.this, "FAB Clicked.", Toast.LENGTH_SHORT).show();
-//                selectImage();
-//            }
-//        });
 
-
-        // Set default username is anonymous.
-//        mUsername = ANONYMOUS;
         fu = new FileUtils(Image.this);
-//        // Initialize Firebase Auth
-//        mFirebaseAuth = FirebaseAuth.getInstance();
-//        mFirebaseUser = mFirebaseAuth.getCurrentUser();
-//        if (mFirebaseUser == null) {
-//            // Not signed in, launch the Sign In activity
-//            startActivity(new Intent(this, SignInActivity.class));
-//            finish();
-//            return;
-//        } else {
-//            mUsername = mFirebaseUser.getDisplayName();
-//            System.out.println("mUsername :" + mUsername);
-//        }
-//
-//        mGoogleApiClient = new GoogleApiClient.Builder(this)
-//                .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
-//                .addApi(Auth.GOOGLE_SIGN_IN_API)
-//                .build();
+
 
 
      //   btnChoose = (Button) findViewById(R.id.button_choose);
@@ -237,27 +205,6 @@ public class Image extends AppCompatActivity implements GoogleApiClient.OnConnec
                 }
             }
         }
-      //  bClick = (Button)findViewById(R.id.Bclick);
-
-        //For camera
-//        bClick.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//
-//                picUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
-//                startActivityForResult(cameraIntent,CAMERA_REQUEST);
-//            }
-//        });
-
-
-//        btnChoose.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                imageBrowse();
-//            }
-//        });
-
 
         btnUpload = findViewById(R.id.button_upload);
         btnUpload.setOnClickListener(new View.OnClickListener() {
@@ -267,46 +214,6 @@ public class Image extends AppCompatActivity implements GoogleApiClient.OnConnec
                 pgsBar.setVisibility(view.VISIBLE);
 
                 if (bitmap != null) {
-////                    imageUpload(filePath);
-//
-//                    String filePath = fu.getPath(bitmap);
-//                    System.out.println("Image file path is: " + filePath);
-//                   // mPhotoFile = mCompressor.compressToFile(new File(getRealPathFromUri(selectedImage)));
-//                    if(filePath.contains("JPEG_")) {
-//                        Bitmap rotate_bmp = null;
-//
-//                        Bitmap bmp = null;
-//                        try {
-//                            bmp = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), bitmap);
-//                            System.out.println("Original bmp size: width " + bmp.getWidth() + ", height " + bmp.getHeight());
-//                        } catch (IOException e) {
-//                            e.printStackTrace();
-//                        }
-//                        if(bmp != null) {
-//                            rotate_bmp = rotateImage(bmp, filePath);
-//                        }
-//
-//                        File dest = null;
-//
-//                        try {
-//                            dest = createImageFile();
-//                        } catch (IOException e) {
-//                            e.printStackTrace();
-//                        }
-//
-//                        if (dest != null) {
-//                            try {
-//                                FileOutputStream out = new FileOutputStream(dest);
-//                                rotate_bmp.compress(Bitmap.CompressFormat.PNG, 90, out);
-//                                out.flush();
-//                                out.close();
-//                                filePath = dest.getPath();
-//                                System.out.println("Image file path after rotate is: " + filePath );
-//                            } catch (Exception e) {
-//                                e.printStackTrace();
-//                            }
-//                        }
-//                    }
 
                     f = new File(filePath);
 
@@ -401,7 +308,6 @@ public class Image extends AppCompatActivity implements GoogleApiClient.OnConnec
      * Get real file path from URI
      */
     public String getRealPathFromUri(Uri contentUri) {
-        System.out.println("contentUri path: ---------------------: " + contentUri.getPath());
         String imagePath = contentUri.getPath();
         if (imagePath != null) {
             return imagePath;
@@ -471,31 +377,6 @@ public class Image extends AppCompatActivity implements GoogleApiClient.OnConnec
         return true;
     }
 
-//    //Inflate menu to bottom bar
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.main_menu, menu);
-//        return super.onCreateOptionsMenu(menu);
-//    }
-
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        System.out.println("!!!!!!!!!!!!!!!");
-//        switch (item.getItemId()) {
-//            case R.id.sign_out_menu:
-//                mFirebaseAuth.signOut();
-//                Auth.GoogleSignInApi.signOut(mGoogleApiClient);
-//                mUsername = ANONYMOUS;
-//                startActivity(new Intent(this, SignInActivity.class));
-//                finish();
-//                return true;
-//            case R.id.action_notification:
-//                break;
-//            default:
-//                return super.onOptionsItemSelected(item);
-//        }
-//        return false;
-//    }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
@@ -508,28 +389,7 @@ public class Image extends AppCompatActivity implements GoogleApiClient.OnConnec
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-//        if (resultCode == RESULT_OK) {
-//
-//            if(requestCode == PICK_IMAGE_REQUEST){
-//                picUri = data.getData();
-//
-//
-//                filePath = getPath(picUri);
-//
-//                Log.d("picUri", picUri.toString());
-//                Log.d("filePath", filePath);
-//
-//                imageView.setImageURI(picUri);
-//
-//            }
-//
-//            if(requestCode == CAMERA_REQUEST) {
-//                Bundle bundle  = data.getExtras();
-//                final Bitmap bmp = (Bitmap) bundle.get("data");
-//                imageView.setImageBitmap(bmp);
-//            }
 
- //       }
 
     }
 

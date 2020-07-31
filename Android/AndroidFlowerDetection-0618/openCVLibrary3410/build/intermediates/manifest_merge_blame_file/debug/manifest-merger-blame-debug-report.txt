@@ -6,8 +6,14 @@
 6
 7    <uses-sdk
 8        android:minSdkVersion="8"
+<<<<<<< HEAD
 8-->D:\projects\git\3\Android_Flower_Detection\Android\AndroidFlowerDetection-0618\openCVLibrary3410\src\main\AndroidManifest.xml
 9        android:targetSdkVersion="21" />
 9-->D:\projects\git\3\Android_Flower_Detection\Android\AndroidFlowerDetection-0618\openCVLibrary3410\src\main\AndroidManifest.xml
+=======
+8-->/Users/jennychen/workspace/Android_Flower_Detection/Android/AndroidFlowerDetection-0618/openCVLibrary3410/src/main/AndroidManifest.xml
+9        android:targetSdkVersion="21" />
+9-->/Users/jennychen/workspace/Android_Flower_Detection/Android/AndroidFlowerDetection-0618/openCVLibrary3410/src/main/AndroidManifest.xml
+>>>>>>> 9b1bacbd72db1348c3d8c77eb601c355aaeb501d
 10
 11</manifest>
