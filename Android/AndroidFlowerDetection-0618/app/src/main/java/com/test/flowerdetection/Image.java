@@ -6,7 +6,9 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 //import android.media.Image;
+import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.graphics.Rect;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -158,6 +160,7 @@ public class Image extends AppCompatActivity implements GoogleApiClient.OnConnec
             if (filePath.contains("JPEG_")) {
 
                 rotate_bmp = rotateImage(resize_bmp, filePath);
+                rotate_bmp = rectbitmap(rotate_bmp);
                 File dest = null;
 
                 try {
@@ -361,6 +364,29 @@ public class Image extends AppCompatActivity implements GoogleApiClient.OnConnec
         }
 
         return mediaFile;
+    }
+
+    private Bitmap rectbitmap(Bitmap bitmap) {
+        Bitmap origialBitmap = bitmap;
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+
+        Bitmap cutBitmap = null;
+
+        if(width < height) {
+            cutBitmap = Bitmap.createBitmap(width, width, Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(cutBitmap);
+            Rect desRect = new Rect(0, 0, width, width);
+            Rect srcRect = new Rect(0, height/2 - width/2, width, height/2 + width/2);
+            canvas.drawBitmap(origialBitmap, srcRect, desRect, null );
+        } else {
+            cutBitmap = Bitmap.createBitmap(height, height, Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(cutBitmap);
+            Rect desRect = new Rect(0, 0, height, height);
+            Rect srcRect = new Rect(width/2 - height/2, 0, height/2 + width/2, height);
+            canvas.drawBitmap(origialBitmap, srcRect, desRect, null );
+        }
+        return cutBitmap;
     }
 
     private void imageBrowse() {

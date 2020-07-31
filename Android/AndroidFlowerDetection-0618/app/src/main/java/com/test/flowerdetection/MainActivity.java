@@ -568,7 +568,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                         return true;
 
                     case R.id.action_video:
-                        Toast.makeText(MainActivity.this, "Video clicked.", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(MainActivity.this, "Video clicked.", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(getApplicationContext(), Opencv_camera.class);
                         startActivity(intent);
                         return true;

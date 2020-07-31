@@ -134,21 +134,21 @@ public class Opencv_camera extends AppCompatActivity implements CameraBridgeView
                 }
 
 //            //Original save file
+                //Cut image to square
+                Mat mSquare = mRgbaT.submat(mRgbaT.height()/2 - mRgbaT.width()/2, mRgbaT.height()/2 + mRgbaT.width()/2, 0, mRgbaT.width());
+
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmssSSS");
             String date = simpleDateFormat.format(new Date());
             String filename = "VIDEO_" + date + ".png";
-            Imgproc.cvtColor(mRgbaT, mRgbaT, Imgproc.COLOR_BGR2RGB);
+            Imgproc.cvtColor(mSquare, mSquare, Imgproc.COLOR_BGR2RGB);
 
-            File mediaStorageDir = new File(
-                        Environment
-                                .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-                        Config.IMAGE_DIRECTORY_NAME);
-                String folder = mediaStorageDir.getPath();
                 String filePath = "/data/user/0/com.test.flowerdetection/files/fd" + "/" + filename;
                 System.out.println("Video file path: " + filePath);
-                Imgcodecs.imwrite(filePath, mRgbaT);
+
+
+                Imgcodecs.imwrite(filePath, mSquare);
             File f = new File(filePath);
-            VideoFrameUploadTask videoFrameUploadTask = new VideoFrameUploadTask(f, mRgbaT, filePath);
+            VideoFrameUploadTask videoFrameUploadTask = new VideoFrameUploadTask(f, mSquare, filePath);
             videoFrameUploadTask.execute();
 
                 //New save file try
@@ -311,9 +311,9 @@ public class Opencv_camera extends AppCompatActivity implements CameraBridgeView
             JSONObject jsonobject = arr.getJSONObject(i);
             String category = jsonobject.getString("type");
             JSONObject box = jsonobject.getJSONObject("box");
-            int top0 = box.getInt("top");
+            int top0 = box.getInt("top") + frame_width/2 - frame_height/2;
             int left0 = box.getInt("left");
-            int bottom0 = box.getInt("bottom");
+            int bottom0 = box.getInt("bottom") + frame_width/2 - frame_height/2;
             int right0 = box.getInt("right");
 
             int top = frame_height - right0;
