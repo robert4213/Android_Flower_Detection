@@ -37,7 +37,8 @@ public class RegisterActivity extends AppCompatActivity {
     Button btnRegister;
     ProgressDialog loading;
     Context mContext;
-    public static String postUrl = "http://10.0.2.2:5000/user/register";
+    //public static String postUrl = "http://10.0.2.2:5000/user/register";
+    public static String postUrl;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
@@ -45,6 +46,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
         mContext = this;
+        postUrl = mContext.getString(R.string.posturl) + "/user/register";
         //mApiService = UtilsApi.getAPIService();
 
         btnRegister.setOnClickListener(new View.OnClickListener() {

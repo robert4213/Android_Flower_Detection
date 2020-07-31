@@ -234,6 +234,8 @@ public class SignInActivity extends AppCompatActivity implements
     public void postRequest(String postUrl, RequestBody postBody) {
         OkHttpClient client = new OkHttpClient();
 
+        System.out.println("postUrl: " + postUrl);
+
         Request request = new Request.Builder()
                 .url(postUrl)
                 .post(postBody)

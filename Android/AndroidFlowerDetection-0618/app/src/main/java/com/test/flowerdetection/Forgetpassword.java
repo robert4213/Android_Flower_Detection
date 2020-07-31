@@ -28,12 +28,14 @@ import okhttp3.Response;
 public class Forgetpassword extends AppCompatActivity {
     Button btnChangPassword;
     Context mContext;
-    public static String postUrl = "http://10.0.2.2:5000/user/change_password";
+    //public static String postUrl = "http://10.0.2.2:5000/user/change_password";
+    public static String postUrl;
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forgetpassword);
         mContext = this;
+        postUrl = mContext.getString(R.string.posturl) + "/user/change_password";
         btnChangPassword = findViewById(R.id.btnChangPassword);
         btnChangPassword.setOnClickListener(new View.OnClickListener(){
 

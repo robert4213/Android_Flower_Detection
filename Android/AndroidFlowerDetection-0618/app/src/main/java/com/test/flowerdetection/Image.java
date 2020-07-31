@@ -171,20 +171,25 @@ public class Image extends AppCompatActivity implements GoogleApiClient.OnConnec
             filePath = fu.getPath(bitmap);
             System.out.println("Image file path is: " + filePath);
             // mPhotoFile = mCompressor.compressToFile(new File(getRealPathFromUri(selectedImage)));
+            Bitmap bmp = null;
+            Bitmap rotate_bmp = null;
+            Bitmap resize_bmp = null;
+            try {
+                bmp = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), bitmap);
+                System.out.println("Original bmp size: width " + bmp.getWidth() + ", height " + bmp.getHeight());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            if (bmp != null) {
+                System.out.println("Start rotate bitmap");
+                resize_bmp = getResizedBitmap(bmp);
+                //rotate_bmp = rotateImage(resize_bmp, filePath);
+            }
+
             if (filePath.contains("JPEG_")) {
-                Bitmap rotate_bmp = null;
 
-                Bitmap bmp = null;
-                try {
-                    bmp = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), bitmap);
-                    System.out.println("Original bmp size: width " + bmp.getWidth() + ", height " + bmp.getHeight());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                if (bmp != null) {
-                    rotate_bmp = rotateImage(bmp, filePath);
-                }
-
+                rotate_bmp = rotateImage(resize_bmp, filePath);
                 File dest = null;
 
                 try {
@@ -200,10 +205,35 @@ public class Image extends AppCompatActivity implements GoogleApiClient.OnConnec
                         out.flush();
                         out.close();
                         filePath = dest.getPath();
-                        System.out.println("Image file path after rotate is: " + filePath);
+                        System.out.println("Image file path after rotate is: " + filePath + "Width: " + rotate_bmp.getWidth() + "Height: " + rotate_bmp.getHeight());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+                }
+            } else {
+                rotate_bmp = resize_bmp;
+                File file = new File(filePath);
+                if (file.exists()) {
+                    file.delete();
+                    try {
+                        file.createNewFile();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                if (file != null) {
+                    try {
+                        FileOutputStream out = new FileOutputStream(file);
+                        rotate_bmp.compress(Bitmap.CompressFormat.PNG, 90, out);
+                        out.flush();
+                        out.close();
+                        filePath = file.getPath();
+                        System.out.println("Image file path after rotate is: " + filePath + "Width: " + rotate_bmp.getWidth() + "Height: " + rotate_bmp.getHeight());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
                 }
             }
         }
@@ -335,6 +365,35 @@ public class Image extends AppCompatActivity implements GoogleApiClient.OnConnec
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File mFile = File.createTempFile(mFileName, ".jpg", storageDir);
         return mFile;
+    }
+
+    public Bitmap getResizedBitmap(Bitmap bm) {
+        int width = bm.getWidth();
+        int height = bm.getHeight();
+        if(width > 600 || height > 600) {
+            int newWidth;
+            int newHeight;
+            if (height > width) {
+                newHeight = 600;
+                newWidth = width * 600 / height;
+            } else {
+                newWidth = 600;
+                newHeight = height * 600 / width;
+            }
+            float scaleWidth = ((float) newWidth) / width;
+            float scaleHeight = ((float) newHeight) / height;
+            // CREATE A MATRIX FOR THE MANIPULATION
+            Matrix matrix = new Matrix();
+            // RESIZE THE BIT MAP
+            matrix.postScale(scaleWidth, scaleHeight);
+
+            // "RECREATE" THE NEW BITMAP
+            Bitmap resizedBitmap = Bitmap.createBitmap(
+                    bm, 0, 0, width, height, matrix, false);
+            bm.recycle();
+            return resizedBitmap;
+        }
+        return bm;
     }
 
 

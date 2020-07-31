@@ -3,6 +3,7 @@ package com.test.flowerdetection;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -64,6 +65,10 @@ public class Opencv_camera extends AppCompatActivity implements CameraBridgeView
     Size reshape;
     int frame_height;
     int frame_width;
+    boolean isVisible;
+    String predictResult;
+    Mat bmp_rect;
+
 
 
     @Override
@@ -80,6 +85,8 @@ public class Opencv_camera extends AppCompatActivity implements CameraBridgeView
         double height = cameraBridgeViewBase.getHeight();
         reshape = new Size(width, height);
         System.out.println("Preview Size: " + width + "/" + height);
+        predictResult = "Start";
+        bmp_rect = null;
 
 
         //System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
@@ -108,57 +115,84 @@ public class Opencv_camera extends AppCompatActivity implements CameraBridgeView
     @Override
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
 
-        Mat mRgba = inputFrame.rgba();
-        Mat mRgbaT = mRgba.t();
 
-        if(counter % 5 == 0) {
+
+        Mat mRgba = inputFrame.rgba();
+        Mat mRgbaT = new Mat();
+        Core.flip(mRgba.t(), mRgbaT, 1);
+
+        if(isVisible = true) {
+
+            if (predictResult == "Start" || predictResult != null) {
+                try {
+
+                    if (rect != null && rect.length() > 10) {
+                        bmp_rect = drawBitmap(rect);
+                    }
+                } catch (JSONException E) {
+                    E.printStackTrace();
+                }
 
 //            //Original save file
-//            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmssSSS");
-//            String date = simpleDateFormat.format(new Date());
-//            String filename = "VIDEO_" + date + ".png";
-//
-//            File mediaStorageDir = new File(
-//                    Environment
-//                            .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-//                    Config.IMAGE_DIRECTORY_NAME);
-//            String folder = mediaStorageDir.getPath();
-//            String filePath = "/data/user/0/com.test.flowerdetection/files/fd" + "/" + filename;
-//            System.out.println("Video file path: " + filePath);
-//            Imgcodecs.imwrite(filePath, mRgbaT);
-//            File f = new File(filePath);
-//            VideoFrameUploadTask videoFrameUploadTask = new VideoFrameUploadTask(f, mRgbaT, filePath);
-//            videoFrameUploadTask.execute();
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+            String date = simpleDateFormat.format(new Date());
+            String filename = "VIDEO_" + date + ".png";
+            Imgproc.cvtColor(mRgbaT, mRgbaT, Imgproc.COLOR_BGR2RGB);
 
-            //New save file try
-            String filePath = "";
-            try {
-                filePath = createImageFile();
-                System.out.println("Video Frame file path: " + filePath);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            if(filePath != "") {
+            File mediaStorageDir = new File(
+                        Environment
+                                .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                        Config.IMAGE_DIRECTORY_NAME);
+                String folder = mediaStorageDir.getPath();
+                String filePath = "/data/user/0/com.test.flowerdetection/files/fd" + "/" + filename;
+                System.out.println("Video file path: " + filePath);
                 Imgcodecs.imwrite(filePath, mRgbaT);
-                File f = new File(filePath);
-                VideoFrameUploadTask videoFrameUploadTask = new VideoFrameUploadTask(f, mRgbaT, filePath);
-                videoFrameUploadTask.execute();
+            File f = new File(filePath);
+            VideoFrameUploadTask videoFrameUploadTask = new VideoFrameUploadTask(f, mRgbaT, filePath);
+            videoFrameUploadTask.execute();
+
+                //New save file try
+//                filePath = "";
+//                try {
+//                    filePath = createImageFile();
+//                    System.out.println("Video Frame file path: " + filePath);
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//                if (filePath != "") {
+//                    Imgcodecs.imwrite(filePath, mRgbaT);
+//                    File f = new File(filePath);
+//                    VideoFrameUploadTask videoFrameUploadTask = new VideoFrameUploadTask(f, mRgbaT, filePath);
+//                    videoFrameUploadTask.execute();
+//                }
             }
+
+//            try {
+//                String prev_rect = "";
+//                bmp_rect = null;
+//
+//                if (prev_rect != rect && rect != null && rect.length() > 10) {
+//                    System.out.println("Ready to draw rect. " + rect);
+//                    bmp_rect = drawBitmap(rect);
+//
+////                System.out.println("Image size: col: " + mRgba.cols() + ", row: " + mRgba.rows());
+////                System.out.println("bmp_rect size: col: " + bmp_rect.cols() + ", row: " + bmp_rect.rows());
+//                    Core.addWeighted(mRgba, 1, bmp_rect, 1, 1, mRgba);
+//                    prev_rect = rect;
+//
+//                } else {
+//                    if(bmp_rect != null) {
+//                        Core.addWeighted(mRgba, 1, bmp_rect, 1, 1, mRgba);
+//                    }
+//                }
+//            } catch (JSONException E) {
+//                E.printStackTrace();
+//            }
+            if(bmp_rect != null) {Core.addWeighted(mRgba, 1, bmp_rect, 1, 1, mRgba);}
+            counter = counter + 1;
+        } else {
+            System.out.println("isVisible: " + isVisible);
         }
-
-        try {
-            if(rect != null) {
-                Mat bmp_rect = drawBitmap(rect);
-//                System.out.println("Image size: col: " + mRgba.cols() + ", row: " + mRgba.rows());
-//                System.out.println("bmp_rect size: col: " + bmp_rect.cols() + ", row: " + bmp_rect.rows());
-                Core.addWeighted(mRgba, 1, bmp_rect, 1, 1, mRgba);
-            }
-        } catch (JSONException E) {
-            E.printStackTrace();
-        }
-
-
-        counter = counter + 1;
 
         return mRgba;
     }
@@ -166,6 +200,8 @@ public class Opencv_camera extends AppCompatActivity implements CameraBridgeView
 
     @Override
     public void onCameraViewStarted(int width, int height) {
+        isVisible = true;
+        rect = "";
         frame_height = height;
         frame_width = width;
 
@@ -181,6 +217,8 @@ public class Opencv_camera extends AppCompatActivity implements CameraBridgeView
     @Override
     protected void onResume() {
         super.onResume();
+        predictResult = "Start";
+        bmp_rect = null;
 
         if (!OpenCVLoader.initDebug()){
             Toast.makeText(getApplicationContext(),"There's a problem, yo!", Toast.LENGTH_SHORT).show();
@@ -189,6 +227,7 @@ public class Opencv_camera extends AppCompatActivity implements CameraBridgeView
         else
         {
             baseLoaderCallback.onManagerConnected(baseLoaderCallback.SUCCESS);
+            isVisible = true;
         }
     }
 
@@ -199,6 +238,9 @@ public class Opencv_camera extends AppCompatActivity implements CameraBridgeView
 
             cameraBridgeViewBase.disableView();
         }
+        System.out.println("Current Status: stopped");
+        isVisible = false;
+        finish();
 
     }
 
@@ -209,6 +251,9 @@ public class Opencv_camera extends AppCompatActivity implements CameraBridgeView
         if (cameraBridgeViewBase!=null){
             cameraBridgeViewBase.disableView();
         }
+        System.out.println("Current Status: destroy");
+        isVisible = false;
+        finish();
     }
 
     public void drawbox(Mat frame, String rect) throws JSONException {
@@ -275,13 +320,14 @@ public class Opencv_camera extends AppCompatActivity implements CameraBridgeView
             int left = top0;
             int bottom = frame_height - left0;
             int right = bottom0;
-            paint.setColor(Color.RED);
+            paint.setColor(Color.GREEN);
             paint.setStyle(Paint.Style.STROKE);
             paint.setStrokeWidth(2);
             canvas.drawRect(left, top, right, bottom, paint);
             canvas.save();
             canvas.rotate(270, left, frame_height - left0);
-            paint.setTextSize(20);
+            paint.setStyle(Paint.Style.FILL);
+            paint.setTextSize(25);
             canvas.drawText(category, left, frame_height - left0, paint);
             canvas.restore();
         }
@@ -315,7 +361,7 @@ public class Opencv_camera extends AppCompatActivity implements CameraBridgeView
         @RequiresApi(api = Build.VERSION_CODES.KITKAT)
         @Override
         protected String doInBackground(String... strings) {
-            String predictResult = null;
+            predictResult = null;
             String BASE_URL = Opencv_camera.this.getString(R.string.posturl) + "/upload";
             try {
                 RequestBody requestBody = new MultipartBody.Builder()
@@ -336,7 +382,8 @@ public class Opencv_camera extends AppCompatActivity implements CameraBridgeView
                     if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
                     System.out.println("This is the response");
                     predictResult = response.body().string();
-                    System.out.println(predictResult);
+                    System.out.println("predicted results: " + predictResult);
+                    rect = predictResult;
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -348,7 +395,8 @@ public class Opencv_camera extends AppCompatActivity implements CameraBridgeView
 
         @Override
         protected void onPostExecute(String s) {
-            rect = s;
+            //rect = s;
+            //System.out.println("Video box: " + rect);
 
             if (f.exists()) {
                 String deleteCmd = "rm -r " + filepath;
@@ -356,9 +404,7 @@ public class Opencv_camera extends AppCompatActivity implements CameraBridgeView
                 Runtime runtime = Runtime.getRuntime();
                 try {
                     runtime.exec(deleteCmd);
-                } catch (IOException e) {
-
-                }
+                } catch (IOException e) {}
             }
 
         }
