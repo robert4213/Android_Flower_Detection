@@ -519,14 +519,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
         String[] proj = { MediaStore.Images.Media.DATA };
         CursorLoader loader = new CursorLoader(getApplicationContext(), contentUri, proj, null, null, null);
         // CursorLoader loader = new CursorLoader(this.getActivity(), contentUri, proj, null, null, null);
-        System.out.println("++++" + loader);
         Cursor cursor = loader.loadInBackground();
-        System.out.println("---" + cursor);
         int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        System.out.println("****" + column_index);
         cursor.moveToFirst();
         String result = cursor.getString(column_index);
-        System.out.println("/////" + result);
         cursor.close();
         return result;
     }
