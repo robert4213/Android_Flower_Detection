@@ -80,7 +80,9 @@ public class ImgItemDetail extends AppCompatActivity {
 
             Bitmap bmp = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
 
-            Bitmap rotated_bmp = rotateImage(bmp, imgFile.getAbsolutePath());
+            //Bitmap rotated_bmp = rotateImage(bmp, imgFile.getAbsolutePath());
+
+            Bitmap rotated_bmp = bmp;
 
             imageView.setImageBitmap(rotated_bmp);
 
@@ -163,33 +165,5 @@ public class ImgItemDetail extends AppCompatActivity {
                 rect[2]);
         canvas.drawBitmap(origialBitmap, srcRect, desRect, null);
         return cutBitmap;
-    }
-
-    private Bitmap rotateImage(Bitmap bitmap, String ImageLocation) {
-        ExifInterface exifInterface = null;
-        try {
-            exifInterface = new ExifInterface(ImageLocation);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
-        System.out.println("Orientation: " + orientation);
-        Matrix matrix = new Matrix();
-        Bitmap rotatedBitmap = null;
-        switch (orientation) {
-            case ExifInterface.ORIENTATION_ROTATE_90:
-                System.out.println("Orientation is 90");
-                matrix.postRotate(90);
-                rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-                break;
-            case ExifInterface.ORIENTATION_ROTATE_180:
-                matrix.setRotate(180);
-                rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-                break;
-            default:
-                rotatedBitmap = bitmap;
-        }
-
-        return rotatedBitmap;
     }
 }

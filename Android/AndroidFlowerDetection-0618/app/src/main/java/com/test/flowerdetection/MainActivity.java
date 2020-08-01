@@ -101,6 +101,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
 //    private static final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
     //  http://192.168.42.80:5000
     //  http://10.0.2.2:5000
+    //  http://34.105.118.192
     private static String BASE_URL = "http://192.168.1.144:5000/upload";
     static final int PICK_IMAGE_REQUEST = 1;
 //    static final int CAMERA_REQUEST = 1888;
@@ -563,7 +564,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.O
                         return true;
 
                     case R.id.action_video:
-                        Toast.makeText(MainActivity.this, "Video clicked.", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(MainActivity.this, "Video clicked.", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(getApplicationContext(), Opencv_camera.class);
                         startActivity(intent);
                         return true;

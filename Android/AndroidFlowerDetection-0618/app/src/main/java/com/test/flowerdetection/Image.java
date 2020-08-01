@@ -6,7 +6,9 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 //import android.media.Image;
+import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.graphics.Rect;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -139,20 +141,26 @@ public class Image extends AppCompatActivity implements GoogleApiClient.OnConnec
             filePath = fu.getPath(bitmap);
             System.out.println("Image file path is: " + filePath);
             // mPhotoFile = mCompressor.compressToFile(new File(getRealPathFromUri(selectedImage)));
+            Bitmap bmp = null;
+            Bitmap rotate_bmp = null;
+            Bitmap resize_bmp = null;
+            try {
+                bmp = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), bitmap);
+                System.out.println("Original bmp size: width " + bmp.getWidth() + ", height " + bmp.getHeight());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            if (bmp != null) {
+                System.out.println("Start rotate bitmap");
+                resize_bmp = getResizedBitmap(bmp);
+                //rotate_bmp = rotateImage(resize_bmp, filePath);
+            }
+
             if (filePath.contains("JPEG_")) {
-                Bitmap rotate_bmp = null;
 
-                Bitmap bmp = null;
-                try {
-                    bmp = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), bitmap);
-                    System.out.println("Original bmp size: width " + bmp.getWidth() + ", height " + bmp.getHeight());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                if (bmp != null) {
-                    rotate_bmp = rotateImage(bmp, filePath);
-                }
-
+                rotate_bmp = rotateImage(resize_bmp, filePath);
+                rotate_bmp = rectbitmap(rotate_bmp);
                 File dest = null;
 
                 try {
@@ -168,10 +176,35 @@ public class Image extends AppCompatActivity implements GoogleApiClient.OnConnec
                         out.flush();
                         out.close();
                         filePath = dest.getPath();
-                        System.out.println("Image file path after rotate is: " + filePath);
+                        System.out.println("Image file path after rotate is: " + filePath + "Width: " + rotate_bmp.getWidth() + "Height: " + rotate_bmp.getHeight());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+                }
+            } else {
+                rotate_bmp = resize_bmp;
+                File file = new File(filePath);
+                if (file.exists()) {
+                    file.delete();
+                    try {
+                        file.createNewFile();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                if (file != null) {
+                    try {
+                        FileOutputStream out = new FileOutputStream(file);
+                        rotate_bmp.compress(Bitmap.CompressFormat.PNG, 90, out);
+                        out.flush();
+                        out.close();
+                        filePath = file.getPath();
+                        System.out.println("Image file path after rotate is: " + filePath + "Width: " + rotate_bmp.getWidth() + "Height: " + rotate_bmp.getHeight());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
                 }
             }
         }
@@ -244,6 +277,35 @@ public class Image extends AppCompatActivity implements GoogleApiClient.OnConnec
         return mFile;
     }
 
+    public Bitmap getResizedBitmap(Bitmap bm) {
+        int width = bm.getWidth();
+        int height = bm.getHeight();
+        if(width > 600 || height > 600) {
+            int newWidth;
+            int newHeight;
+            if (height > width) {
+                newHeight = 600;
+                newWidth = width * 600 / height;
+            } else {
+                newWidth = 600;
+                newHeight = height * 600 / width;
+            }
+            float scaleWidth = ((float) newWidth) / width;
+            float scaleHeight = ((float) newHeight) / height;
+            // CREATE A MATRIX FOR THE MANIPULATION
+            Matrix matrix = new Matrix();
+            // RESIZE THE BIT MAP
+            matrix.postScale(scaleWidth, scaleHeight);
+
+            // "RECREATE" THE NEW BITMAP
+            Bitmap resizedBitmap = Bitmap.createBitmap(
+                    bm, 0, 0, width, height, matrix, false);
+            bm.recycle();
+            return resizedBitmap;
+        }
+        return bm;
+    }
+
 
     /**
      * Get real file path from URI
@@ -302,6 +364,29 @@ public class Image extends AppCompatActivity implements GoogleApiClient.OnConnec
         }
 
         return mediaFile;
+    }
+
+    private Bitmap rectbitmap(Bitmap bitmap) {
+        Bitmap origialBitmap = bitmap;
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+
+        Bitmap cutBitmap = null;
+
+        if(width < height) {
+            cutBitmap = Bitmap.createBitmap(width, width, Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(cutBitmap);
+            Rect desRect = new Rect(0, 0, width, width);
+            Rect srcRect = new Rect(0, height/2 - width/2, width, height/2 + width/2);
+            canvas.drawBitmap(origialBitmap, srcRect, desRect, null );
+        } else {
+            cutBitmap = Bitmap.createBitmap(height, height, Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(cutBitmap);
+            Rect desRect = new Rect(0, 0, height, height);
+            Rect srcRect = new Rect(width/2 - height/2, 0, height/2 + width/2, height);
+            canvas.drawBitmap(origialBitmap, srcRect, desRect, null );
+        }
+        return cutBitmap;
     }
 
     private void imageBrowse() {

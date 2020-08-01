@@ -134,7 +134,8 @@ public class ShowResult extends AppCompatActivity {
         File imgFile = new File(file_path);
         Bitmap orig_bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
 
-        bitmap = rotateImage(orig_bitmap, imgFile.getAbsolutePath());
+        //bitmap = rotateImage(orig_bitmap, imgFile.getAbsolutePath());
+        bitmap = orig_bitmap;
         imageView.setImageBitmap(bitmap);
 
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -234,9 +235,9 @@ public class ShowResult extends AppCompatActivity {
         left = rects[1];
         bottom = rects[2];
         right = rects[3];
-        paint.setColor(Color.RED);
+        paint.setColor(Color.GREEN);
         paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth(10);
+        paint.setStrokeWidth(5);
         canvas.drawRect(left, top, right, bottom, paint);
         return mutableBitmap;
     }
@@ -390,7 +391,7 @@ public class ShowResult extends AppCompatActivity {
             cutBitmap = Bitmap.createBitmap(height, height, Bitmap.Config.ARGB_8888);
             Canvas canvas = new Canvas(cutBitmap);
             Rect desRect = new Rect(0, 0, height, height);
-            Rect srcRect = new Rect(width/2 - height/2, 0, height, height/2 + width/2);
+            Rect srcRect = new Rect(width/2 - height/2, 0, height/2 + width/2, height);
             canvas.drawBitmap(origialBitmap, srcRect, desRect, null );
         }
         return cutBitmap;
@@ -403,32 +404,5 @@ public class ShowResult extends AppCompatActivity {
         return cursor.getCount() == 0 ? false : true;
     }
 
-    private Bitmap rotateImage(Bitmap bitmap, String ImageLocation) {
-        ExifInterface exifInterface = null;
-        try {
-            exifInterface = new ExifInterface(ImageLocation);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
-        System.out.println("Orientation: " + orientation);
-        Matrix matrix = new Matrix();
-        Bitmap rotatedBitmap = null;
-        switch (orientation) {
-            case ExifInterface.ORIENTATION_ROTATE_90:
-                System.out.println("Orientation is 90");
-                matrix.postRotate(90);
-                rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-                break;
-            case ExifInterface.ORIENTATION_ROTATE_180:
-                matrix.setRotate(180);
-                rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-                break;
-            default:
-                rotatedBitmap = bitmap;
-        }
-
-        return rotatedBitmap;
-    }
 
 }
