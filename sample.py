@@ -8,4 +8,4 @@ if __name__ == '__main__':
     print('*'*20 + 'start detect'+'*'*20)
     print(detect.detect('./yolov4/data/5.jpg'))
     print(detect.detect('./yolov4/data/3.jpg'))
-    print(detect.detect('./yolov4/data/4.jpg'))
+    print(detect.detect('./yolov4/data/10.png'))

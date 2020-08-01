@@ -36,6 +36,9 @@ login_manager.init_app(app)
 # Tell users what view to go to when they need to login.
 login_manager.login_view = "login"
 
+# cookie session
+MY_SESSION = {}
+
 ## !! These imports need to come after you've defined db, otherwise you will
 # get errors in your models.py files.
 ## Grab the blueprints from the other views.py files for each "app"
