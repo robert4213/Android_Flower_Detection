@@ -148,6 +148,9 @@ public class ImgItemDetail extends AppCompatActivity {
         if (id == R.id.delete_img) {
             db.delete(user_name, key);
             Toast.makeText(ImgItemDetail.this, "Delete Images.", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(ImgItemDetail.this, MainActivity.class);
+            startActivity(intent);
+            finish();
             return true;
         }
 

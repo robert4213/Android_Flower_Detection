@@ -50,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:columnWidth="100dp"
-                android:numColumns="5"
+                android:numColumns="4"
                 android:verticalSpacing="5dp"
                 android:horizontalSpacing="5dp"
                 android:stretchMode="spacingWidthUniform"
