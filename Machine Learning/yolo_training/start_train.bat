@@ -1,0 +1,2 @@
+REM darknet.exe detector train build/darknet/x64/data/obj.data cfg/yolov4-obj.cfg build/darknet/x64/yolov4.conv.137 -map
+darknet.exe detector train c20/obj.data c20/yolov4-obj.cfg build/darknet/x64/yolov4.conv.137 -map
